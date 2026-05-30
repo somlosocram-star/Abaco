@@ -27,104 +27,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,700;1,500;1,700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0b0b0c;
-  --panel: #141416;
-  --panel-2: #1b1b1f;
-  --line: #2c2c30;
-  --text: #f4f4f2;
-  --muted: #76767c;
-  --accent: #f4f4f2;
-  --amber: #d4a017;           /* único color, reservado a la victoria/diana */
-  --grain-opacity: 0.45;
-  --vignette: rgba(0,0,0,0.5);
-  --on-accent: #0b0b0c;
-  --bad: #e06363;
+  --bg: #0b0b0c; --panel: #141416; --panel-2: #1b1b1f; --line: #2c2c30;
+  --text: #f4f4f2; --muted: #76767c; --accent: #f4f4f2; --amber: #d4a017;
+  --grain-opacity: 0.45; --vignette: rgba(0,0,0,0.5); --on-accent: #0b0b0c; --bad: #e06363;
 }
 body.light, html.pre-light body {
-  --bg: #f3f2ee;
-  --panel: #e7e6df;
-  --panel-2: #eeede7;
-  --line: #d2d0c6;
-  --text: #17171a;
-  --muted: #8c8b81;
-  --accent: #17171a;
-  --amber: #b8860b;
-  --grain-opacity: 0.16;
-  --vignette: rgba(60,58,50,0.10);
-  --on-accent: #f3f2ee;
+  --bg: #f3f2ee; --panel: #e7e6df; --panel-2: #eeede7; --line: #d2d0c6;
+  --text: #17171a; --muted: #8c8b81; --accent: #17171a; --amber: #b8860b;
+  --grain-opacity: 0.16; --vignette: rgba(60,58,50,0.10); --on-accent: #f3f2ee;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; overflow: hidden; }
 body {
-  background: var(--bg); color: var(--text);
-  font-family: 'Cormorant Garamond', serif;
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 62%),
-    radial-gradient(ellipse 60% 80% at 50% 100%, rgba(255,255,255,0.03) 0%, transparent 62%);
+  background: var(--bg); color: var(--text); font-family: 'Cormorant Garamond', serif;
+  background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 62%), radial-gradient(ellipse 60% 80% at 50% 100%, rgba(255,255,255,0.03) 0%, transparent 62%);
   background-attachment: fixed; position: relative; overscroll-behavior: none;
-  -webkit-user-select: none; user-select: none;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  -webkit-user-select: none; user-select: none; transition: background-color 0.4s ease, color 0.4s ease;
 }
-body.light {
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.04) 0%, transparent 62%),
-    radial-gradient(ellipse 60% 80% at 50% 100%, rgba(0,0,0,0.03) 0%, transparent 62%);
-}
-body::before {
-  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  opacity: var(--grain-opacity); mix-blend-mode: overlay;
-}
-body::after {
-  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1;
-  background: radial-gradient(ellipse at center, transparent 52%, var(--vignette) 100%);
-}
+body.light { background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.04) 0%, transparent 62%), radial-gradient(ellipse 60% 80% at 50% 100%, rgba(0,0,0,0.03) 0%, transparent 62%); }
+body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); opacity: var(--grain-opacity); mix-blend-mode: overlay; }
+body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1; background: radial-gradient(ellipse at center, transparent 52%, var(--vignette) 100%); }
 .mono { font-family: 'IBM Plex Mono', monospace; font-feature-settings: "tnum"; }
 
-/* ---------- Controles flotantes ---------- */
-#theme-toggle {
-  position: fixed; top: max(1rem, env(safe-area-inset-top)); right: 1.2rem; z-index: 500;
-  width: 56px; height: 30px; border-radius: 15px; border: 1px solid var(--line);
-  background: var(--panel); cursor: pointer; outline: none; padding: 0;
-  display: flex; align-items: center; transition: background .3s, border-color .3s;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
-}
-#theme-toggle .knob {
-  position: absolute; width: 24px; height: 24px; border-radius: 50%; left: 2px;
-  background: radial-gradient(circle at 35% 30%, #ffffff, #cfcfcf 70%, #9a9a9a);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.5);
-  transition: transform .3s cubic-bezier(.2,.9,.3,1);
-  display: flex; align-items: center; justify-content: center; font-size: .7rem; line-height: 1;
-}
+#theme-toggle { position: fixed; top: max(1rem, env(safe-area-inset-top)); right: 1.2rem; z-index: 500; width: 56px; height: 30px; border-radius: 15px; border: 1px solid var(--line); background: var(--panel); cursor: pointer; outline: none; padding: 0; display: flex; align-items: center; transition: background .3s, border-color .3s; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); }
+#theme-toggle .knob { position: absolute; width: 24px; height: 24px; border-radius: 50%; left: 2px; background: radial-gradient(circle at 35% 30%, #ffffff, #cfcfcf 70%, #9a9a9a); box-shadow: 0 1px 4px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.5); transition: transform .3s cubic-bezier(.2,.9,.3,1); display: flex; align-items: center; justify-content: center; font-size: .7rem; line-height: 1; }
 #theme-toggle .knob::after { content: '☾'; color: #1a1a1a; }
 body.light #theme-toggle .knob { transform: translateX(26px); background: radial-gradient(circle at 35% 30%, #3a3a3a, #1a1a1a 70%, #000); }
 body.light #theme-toggle .knob::after { content: '☀'; color: #f3f2ee; }
 body.light #theme-toggle { border-color: var(--accent); }
-
-#sound-toggle {
-  position: fixed; top: max(1rem, env(safe-area-inset-top)); right: 5.2rem; z-index: 500;
-  width: 38px; height: 30px; border-radius: 8px; border: 1px solid var(--line);
-  background: var(--panel); cursor: pointer; outline: none; padding: 0;
-  display: flex; align-items: center; justify-content: center; font-size: .95rem;
-  color: var(--text); transition: background .3s, border-color .3s, color .3s;
-}
+#sound-toggle { position: fixed; top: max(1rem, env(safe-area-inset-top)); right: 5.2rem; z-index: 500; width: 38px; height: 30px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); cursor: pointer; outline: none; padding: 0; display: flex; align-items: center; justify-content: center; font-size: .95rem; color: var(--text); transition: background .3s, border-color .3s, color .3s; }
 #sound-toggle.muted { color: var(--muted); }
 #sound-toggle .ic-on { display: inline; } #sound-toggle .ic-off { display: none; }
 #sound-toggle.muted .ic-on { display: none; } #sound-toggle.muted .ic-off { display: inline; }
-
-#help-btn {
-  position: fixed; top: max(1rem, env(safe-area-inset-top)); left: 1.2rem; z-index: 500;
-  width: 30px; height: 30px; border-radius: 50%; border: none; outline: none; cursor: pointer;
-  background: var(--accent); color: var(--on-accent);
-  font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 700;
-  font-size: 1.1rem; line-height: 1; display: flex; align-items: center; justify-content: center;
-  transition: transform .1s, background .3s, color .3s; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
+#help-btn { position: fixed; top: max(1rem, env(safe-area-inset-top)); left: 1.2rem; z-index: 500; width: 30px; height: 30px; border-radius: 50%; border: none; outline: none; cursor: pointer; background: var(--accent); color: var(--on-accent); font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 700; font-size: 1.1rem; line-height: 1; display: flex; align-items: center; justify-content: center; transition: transform .1s, background .3s, color .3s; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
 #help-btn:active { transform: scale(0.9); }
 body.in-game #theme-toggle, body.in-game #sound-toggle, body.in-game #help-btn { opacity: .25; transition: opacity .3s; }
 body.in-game #theme-toggle:active, body.in-game #sound-toggle:active, body.in-game #help-btn:active { opacity: .9; }
 
-/* ---------- Splash ---------- */
 #app-splash { position: fixed; inset: 0; z-index: 1000; background: var(--bg); display: flex; align-items: center; justify-content: center; transition: opacity .6s ease; }
 html.pre-light #app-splash { background: #f3f2ee; }
 #app-splash.hiding { opacity: 0; pointer-events: none; }
@@ -136,21 +75,18 @@ body.light .splash-seal { box-shadow: inset 0 0 40px rgba(0,0,0,.06), 0 0 80px r
 @keyframes glyphDrop { 0%{opacity:0; transform: translateY(-34px) scale(1.4);} 70%{opacity:1; transform: translateY(3px) scale(.96);} 100%{opacity:1; transform: translateY(0) scale(1);} }
 @keyframes ringSpin { to { transform: rotate(360deg); } }
 
-/* ---------- Pantallas ---------- */
 .screen { display: none; position: fixed; inset: 0; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; z-index: 5; overflow-y: auto; }
 .screen.visible { display: flex; animation: screenIn .45s cubic-bezier(.2,.8,.3,1) both; }
 @keyframes screenIn { 0%{opacity:0; transform: translateY(12px);} 100%{opacity:1; transform: translateY(0);} }
-
 .seal { width: 64px; height: 64px; border-radius: 50%; border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 1.4rem; position: relative; box-shadow: inset 0 0 20px rgba(255,255,255,.06); flex-shrink: 0; }
 body.light .seal { box-shadow: inset 0 0 20px rgba(0,0,0,.05); }
 .seal::after { content: ''; position: absolute; border-radius: 50%; border: 1px dotted var(--muted); inset: -8px; opacity: .45; }
 .seal svg { width: 38px; height: 38px; color: var(--accent); }
-
+.seal.pulsing::after { animation: ringSpin 4s linear infinite; opacity: .7; }
 .title { font-size: clamp(2.4rem, 9vw, 4.2rem); font-weight: 500; font-style: italic; line-height: .92; letter-spacing: -.01em; margin-bottom: .2rem; }
 .title span { display: block; font-style: normal; font-weight: 700; letter-spacing: -.02em; }
 .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: .62rem; letter-spacing: .5em; color: var(--muted); margin: 1.1rem 0 2rem; text-transform: uppercase; display: flex; align-items: center; gap: .8rem; }
 .subtitle::before, .subtitle::after { content: '·'; font-size: 1.4rem; opacity: .6; }
-
 .btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 1rem 2rem; font-family: 'IBM Plex Mono', monospace; font-size: .75rem; letter-spacing: .35em; cursor: pointer; outline: none; text-transform: uppercase; transition: all .2s; min-width: 230px; }
 .btn:hover, .btn:active { background: var(--accent); color: var(--on-accent); }
 .btn:disabled { opacity: .35; cursor: default; }
@@ -162,8 +98,8 @@ body.light .seal { box-shadow: inset 0 0 20px rgba(0,0,0,.05); }
 .btn-row { display: flex; flex-direction: column; gap: .8rem; align-items: center; }
 .btn-back-row { margin-top: 1.4rem; }
 .section-label { font-family: 'IBM Plex Mono', monospace; font-size: .58rem; letter-spacing: .3em; color: var(--muted); text-transform: uppercase; margin-bottom: .7rem; }
+.online-intro { max-width: 300px; color: var(--muted); font-size: .95rem; line-height: 1.5; margin-bottom: 1.8rem; }
 
-/* tarjetas de selección (rondas) */
 .cards { display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.6rem; }
 .card { width: 100px; background: linear-gradient(180deg, #2a2a30 0%, #1f1f24 100%); border: 1px solid #3a3a41; border-radius: 8px; cursor: pointer; outline: none; position: relative; display: flex; flex-direction: column; align-items: center; padding: .9rem .5rem; transition: all .2s ease; overflow: hidden; }
 body.light .card { background: linear-gradient(180deg, var(--panel-2) 0%, var(--panel) 100%); border-color: var(--line); }
@@ -173,102 +109,112 @@ body.light .card.selected { background: linear-gradient(180deg, #fbfbf8 0%, #f3f
 .card .c-roman { font-style: italic; font-size: 1.8rem; font-weight: 500; line-height: 1; color: var(--text); }
 .card .c-name { font-family: 'IBM Plex Mono', monospace; font-size: .55rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; color: var(--text); margin-top: .35rem; }
 
-/* ---------- Pantalla de juego ---------- */
+/* online: nombre / código */
+.name-input, .code-input { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; color: var(--text); font-family: 'IBM Plex Mono', monospace; text-align: center; outline: none; transition: border-color .2s; }
+.name-input { font-size: 1.1rem; letter-spacing: .05em; padding: .8rem 1rem; width: 260px; margin-bottom: 1.2rem; }
+.code-input { font-size: 2rem; letter-spacing: .4em; text-transform: uppercase; padding: .8rem .5rem .8rem .9em; width: 230px; margin-bottom: 1rem; }
+.name-input:focus, .code-input:focus { border-color: var(--accent); }
+.name-input::placeholder, .code-input::placeholder { color: var(--muted); opacity: .45; }
+.room-code-label { font-family: 'IBM Plex Mono', monospace; font-size: .55rem; letter-spacing: .35em; color: var(--muted); text-transform: uppercase; margin-bottom: .7rem; }
+.room-code { font-family: 'IBM Plex Mono', monospace; font-size: 2.8rem; letter-spacing: .5em; font-weight: 600; color: var(--accent); padding: .55rem 0 .55rem .5em; border: 1px solid var(--accent); border-radius: 8px; min-width: 220px; box-shadow: inset 0 0 22px rgba(255,255,255,.06); margin-bottom: 1.3rem; }
+body.light .room-code { box-shadow: inset 0 0 22px rgba(0,0,0,.05); }
+.join-error { color: var(--bad); font-size: .8rem; min-height: 1.1em; margin: .3rem 0; letter-spacing: .02em; }
+
+/* lobby */
+.lobby-players { display: flex; flex-direction: column; gap: .5rem; width: 100%; max-width: 340px; margin: 0 auto 1.4rem; }
+.lobby-player { display: flex; align-items: center; gap: .7rem; padding: .55rem .8rem; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); }
+.lobby-player.me { border-color: var(--accent); }
+.lobby-player.disconnected { opacity: .4; }
+.lobby-player .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; background: var(--p-color, var(--muted)); }
+.lobby-player .nm { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; flex: 1; text-align: left; }
+.lobby-player .tag { font-family: 'IBM Plex Mono', monospace; font-size: .5rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.guest-waiting { color: var(--muted); font-size: .95rem; letter-spacing: .04em; }
+.dots::after { content: ''; animation: dots 1.4s steps(4) infinite; }
+@keyframes dots { 0%{content:'';} 25%{content:'.';} 50%{content:'..';} 75%{content:'...';} }
+
 #screen-game { padding: 0; display: none; flex-direction: column; justify-content: flex-start; text-align: center; }
 #screen-game.visible { display: flex; }
-.game-head { flex: 0 0 auto; width: 100%; padding: max(.7rem, env(safe-area-inset-top)) 1rem .3rem; }
+.online-banner { width: 100%; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: .55rem; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); padding: .3rem 0 0; min-height: 1rem; }
+.game-head { flex: 0 0 auto; width: 100%; padding: max(.5rem, env(safe-area-inset-top)) 1rem .3rem; }
 .status-bar { display: flex; align-items: stretch; justify-content: center; gap: .5rem; max-width: 460px; margin: 0 auto; }
 .stat-chip { flex: 1 1 0; min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: .42rem .4rem; display: flex; flex-direction: column; align-items: center; gap: .12rem; }
 .stat-chip .cv { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1.05rem; line-height: 1; }
 .stat-chip.clock .cv.warn { color: var(--bad); }
 .stat-chip .cl { font-family: 'IBM Plex Mono', monospace; font-size: .46rem; letter-spacing: .16em; color: var(--muted); text-transform: uppercase; }
-
-/* objetivo */
-.target-wrap { margin: .8rem auto .3rem; }
+.target-wrap { margin: .7rem auto .25rem; }
 .target-label { font-family: 'IBM Plex Mono', monospace; font-size: .55rem; letter-spacing: .4em; color: var(--muted); text-transform: uppercase; }
-.target-num { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: clamp(2.6rem, 13vw, 3.8rem); line-height: 1; letter-spacing: .04em; }
-
-.board-wrap { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: .2rem .8rem; min-height: 0; gap: .6rem; }
-
-/* fichas de números */
+.target-num { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: clamp(2.4rem, 12vw, 3.6rem); line-height: 1; letter-spacing: .04em; }
+.board-wrap { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: .2rem .8rem; min-height: 0; gap: .55rem; position: relative; }
 .tiles { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; max-width: 440px; }
-.tile {
-  min-width: 60px; height: 58px; padding: 0 .6rem; border-radius: 9px;
-  border: 1px solid var(--line); background: var(--panel);
-  font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1.35rem; color: var(--text);
-  display: flex; align-items: center; justify-content: center; cursor: pointer; outline: none;
-  transition: transform .12s, border-color .15s, background .15s, opacity .2s; position: relative;
-}
+.tile { min-width: 60px; height: 58px; padding: 0 .6rem; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1.35rem; color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; outline: none; transition: transform .12s, border-color .15s, background .15s, opacity .2s; position: relative; }
 .tile.gen { border-style: dashed; border-color: var(--accent); }
-.tile.gen::before { content: '×'; position: absolute; top: -2px; right: 4px; font-size: .6rem; color: var(--muted); }
-.tile.gen::before { content: ''; }
 .tile.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; transform: translateY(-3px); }
 .tile.used { opacity: .28; pointer-events: none; text-decoration: line-through; }
 .tile.appear { animation: tilePop .3s cubic-bezier(.3,1.4,.5,1) both; }
 @keyframes tilePop { 0%{opacity:0; transform: scale(.3);} 70%{transform: scale(1.12);} 100%{opacity:1; transform: scale(1);} }
-
-/* operadores */
 .ops { display: flex; gap: .5rem; justify-content: center; }
-.op {
-  width: 54px; height: 50px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel);
-  color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 1.5rem; cursor: pointer; outline: none;
-  display: flex; align-items: center; justify-content: center; transition: all .15s;
-}
+.op { width: 54px; height: 50px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 1.5rem; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: center; transition: all .15s; }
 .op.sel { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
-
-/* línea de construcción */
-.build {
-  display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px;
-  font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; font-weight: 700;
-}
+.build { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px; font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; font-weight: 700; }
 .build .slot { min-width: 48px; padding: .2rem .5rem; border-bottom: 1px solid var(--line); color: var(--muted); }
 .build .slot.filled { color: var(--text); border-color: var(--accent); }
 .build .eq { color: var(--muted); }
 .build .res { color: var(--accent); min-width: 48px; }
 .build .res.bad { color: var(--bad); font-size: .9rem; }
-.btn-eq {
-  width: 50px; height: 46px; border-radius: 9px; border: 1px solid var(--accent); background: var(--accent);
-  color: var(--on-accent); font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; cursor: pointer; outline: none;
-  display: flex; align-items: center; justify-content: center; transition: all .15s; margin-left: .3rem;
-}
+.btn-eq { width: 50px; height: 46px; border-radius: 9px; border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: center; transition: all .15s; margin-left: .3rem; }
 .btn-eq:disabled { opacity: .25; cursor: default; background: transparent; color: var(--accent); }
-
-/* mejor cifra */
 .best-line { font-family: 'IBM Plex Mono', monospace; font-size: .7rem; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; min-height: 1.1em; }
 .best-line b { color: var(--text); font-weight: 700; font-size: .95rem; }
 .best-line .diana { color: var(--amber); }
-
 .game-foot { flex: 0 0 auto; width: 100%; padding: .5rem 1rem max(.9rem, env(safe-area-inset-bottom)); display: flex; gap: .7rem; justify-content: center; }
 .game-foot .btn-secondary { min-width: 110px; text-align: center; }
+/* velo de espera (online, tras plantarse) */
+.wait-veil { position: absolute; inset: 0; background: color-mix(in srgb, var(--bg) 80%, transparent); display: none; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; z-index: 4; }
+.wait-veil.on { display: flex; }
+.wait-veil .wv-fig { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 2.2rem; }
+.wait-veil .wv-txt { font-family: 'IBM Plex Mono', monospace; font-size: .6rem; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); }
 
-/* ---------- Reveal de ronda ---------- */
-#reveal { position: fixed; inset: 0; z-index: 620; background: color-mix(in srgb, var(--bg) 93%, transparent); display: none; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+#reveal { position: fixed; inset: 0; z-index: 620; background: color-mix(in srgb, var(--bg) 93%, transparent); display: none; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.2rem; }
 #reveal.visible { display: flex; animation: screenIn .45s ease both; }
 #reveal .r-round { font-family: 'IBM Plex Mono', monospace; font-size: .6rem; letter-spacing: .5em; color: var(--muted); text-transform: uppercase; margin-bottom: 1rem; }
-#reveal .r-star { font-size: 3.4rem; color: var(--amber); line-height: 1; text-shadow: 0 0 30px rgba(212,160,23,.6); animation: starSpin 1.4s ease-out both; margin-bottom: .4rem; min-height: 0; }
+#reveal .r-star { font-size: 3.2rem; color: var(--amber); line-height: 1; text-shadow: 0 0 30px rgba(212,160,23,.6); animation: starSpin 1.4s ease-out both; margin-bottom: .3rem; }
 #reveal:not(.diana) .r-star { display: none; }
 @keyframes starSpin { 0%{opacity:0; transform: rotate(-180deg) scale(.3);} 60%{opacity:1; transform: rotate(0) scale(1.2);} 100%{opacity:1; transform: rotate(0) scale(1);} }
-#reveal .r-figure { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: clamp(3rem,14vw,4.4rem); line-height: 1; }
+#reveal .r-figure { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: clamp(2.6rem,12vw,4rem); line-height: 1; }
 #reveal.diana .r-figure { color: var(--amber); }
-#reveal .r-dist { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.5rem; color: var(--text); margin-top: .6rem; }
-#reveal .r-best { font-family: 'IBM Plex Mono', monospace; font-size: .58rem; letter-spacing: .2em; color: var(--muted); text-transform: uppercase; margin-top: 1.1rem; }
+#reveal .r-dist { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.4rem; color: var(--text); margin-top: .5rem; }
+#reveal .r-best { font-family: 'IBM Plex Mono', monospace; font-size: .56rem; letter-spacing: .2em; color: var(--muted); text-transform: uppercase; margin-top: .9rem; }
+/* ranking online */
+#r-rank { display: none; flex-direction: column; gap: .35rem; width: 100%; max-width: 360px; margin-top: 1rem; }
+#reveal.multi #r-rank { display: flex; }
+#reveal.multi .r-figure, #reveal.multi .r-dist, #reveal.multi .r-best, #reveal.multi .r-star { display: none; }
+.rk-row { display: flex; align-items: center; gap: .6rem; padding: .4rem .7rem; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+.rk-row.me { border-color: var(--accent); }
+.rk-row.win { border-color: var(--amber); }
+.rk-pos { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: .8rem; width: 1.4em; color: var(--muted); }
+.rk-row.win .rk-pos { color: var(--amber); }
+.rk-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--p-color, var(--muted)); flex-shrink: 0; }
+.rk-nm { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; flex: 1; text-align: left; }
+.rk-fig { font-family: 'IBM Plex Mono', monospace; font-size: .9rem; }
+.rk-pts { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: .9rem; min-width: 2.4em; text-align: right; }
 
-/* ---------- Final ---------- */
-#final { position: fixed; inset: 0; z-index: 700; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.4rem; background: radial-gradient(ellipse at center, rgba(40,28,5,0.96), var(--bg) 80%); }
+#final { position: fixed; inset: 0; z-index: 700; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.4rem; background: radial-gradient(ellipse at center, rgba(40,28,5,0.96), var(--bg) 80%); overflow-y: auto; }
 body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,120,0.35), var(--bg) 80%); }
 #final.visible { display: flex; animation: screenIn .5s ease both; }
 #final .f-star { font-size: 4rem; color: var(--amber); text-shadow: 0 0 30px rgba(212,160,23,.7); animation: starSpin 1.8s ease-out both; }
 #final .f-label { font-family: 'IBM Plex Mono', monospace; font-size: .65rem; letter-spacing: .55em; color: var(--amber); text-transform: uppercase; margin: 1rem 0 .3rem; }
-#final .f-figure { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(2.6rem,11vw,4.2rem); font-weight: 500; line-height: 1; background: linear-gradient(180deg, #f4d987 0%, #c8941f 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+#final .f-figure { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(2.4rem,10vw,3.8rem); font-weight: 500; line-height: 1; background: linear-gradient(180deg, #f4d987 0%, #c8941f 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 #final .f-sub { font-family: 'IBM Plex Mono', monospace; font-size: .62rem; letter-spacing: .25em; color: var(--muted); text-transform: uppercase; margin-top: .9rem; }
 #final .f-sub b { color: var(--text); font-weight: 700; }
-#final .f-stats { display: flex; gap: 1.4rem; margin: 1.8rem 0 .4rem; }
+#final .f-stats { display: flex; gap: 1.4rem; margin: 1.6rem 0 .2rem; }
+#final.multi .f-stats { display: none; }
 #final .f-stat { display: flex; flex-direction: column; gap: .2rem; }
 #final .f-stat .v { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1.8rem; }
 #final .f-stat .l { font-family: 'IBM Plex Mono', monospace; font-size: .5rem; letter-spacing: .2em; color: var(--muted); text-transform: uppercase; }
-#final .f-btns { margin-top: 1.8rem; display: flex; flex-direction: column; gap: .7rem; align-items: center; }
+#f-standings { display: none; flex-direction: column; gap: .35rem; width: 100%; max-width: 340px; margin: 1.4rem 0 .4rem; }
+#final.multi #f-standings { display: flex; }
+.f-btns { margin-top: 1.6rem; display: flex; flex-direction: column; gap: .7rem; align-items: center; }
 
-/* ---------- Tutorial ---------- */
 #tutorial-overlay { position: fixed; inset: 0; z-index: 600; background: color-mix(in srgb, var(--bg) 97%, transparent); display: none; flex-direction: column; padding: 2rem 1.4rem 1.4rem; overflow-y: auto; }
 #tutorial-overlay.visible { display: flex; animation: screenIn .4s ease both; }
 #tutorial-overlay h2 { font-style: italic; font-size: clamp(2rem,7vw,2.8rem); font-weight: 500; text-align: center; margin-bottom: .2rem; }
@@ -278,24 +224,24 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
 .tut-text { font-size: 1.15rem; line-height: 1.45; text-align: left; }
 .tut-text b { font-weight: 700; border-bottom: 1px solid var(--muted); }
 .tut-close { align-self: center; margin: .8rem 0 1rem; }
+
+#toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 900; background: var(--panel); border: 1px solid var(--line); color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: .7rem; letter-spacing: .05em; padding: .7rem 1.2rem; border-radius: 8px; opacity: 0; pointer-events: none; transition: all .3s; max-width: 80vw; text-align: center; }
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- Música -->
 <audio id="music-menu" src="Constelación_de_Números.mp3" loop preload="auto"></audio>
 <audio id="music-1" src="Nueve_y_Uno.mp3" preload="auto"></audio>
 <audio id="music-2" src="Bajo_la_Luna.mp3" preload="auto"></audio>
 <audio id="music-3" src="Llave_de_Hielo.mp3" preload="auto"></audio>
 
-<!-- Sello SVG: un ábaco -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="ico-abaco" viewBox="0 0 64 64">
       <g stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round">
         <rect x="9" y="10" width="46" height="44" rx="3"/>
-        <line x1="9" y1="24" x2="55" y2="24"/>
-        <line x1="9" y1="38" x2="55" y2="38"/>
+        <line x1="9" y1="24" x2="55" y2="24"/><line x1="9" y1="38" x2="55" y2="38"/>
       </g>
       <g fill="currentColor">
         <circle cx="20" cy="17" r="3.4"/><circle cx="31" cy="17" r="3.4"/><circle cx="46" cy="17" r="3.4"/>
@@ -306,24 +252,20 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
   </defs>
 </svg>
 
-<!-- Controles flotantes -->
 <button id="theme-toggle" aria-label="Cambiar tema"><span class="knob"></span></button>
 <button id="sound-toggle" aria-label="Sonido"><span class="ic-on">♪</span><span class="ic-off">✕</span></button>
 <button id="help-btn" aria-label="Cómo se juega">?</button>
 
-<!-- TUTORIAL -->
 <div id="tutorial-overlay">
   <h2>Cómo se juega</h2>
   <div class="tut-sub">el ábaco · cifras</div>
-  <div class="tut-step"><div class="tut-num">1</div><div class="tut-text">Recibes <b>seis números</b> y un <b>número meta</b>. El objetivo es acercarte lo máximo posible al meta combinando los números.</div></div>
-  <div class="tut-step"><div class="tut-num">2</div><div class="tut-text">Tocas un número, un <b>operador</b> (+, −, ×, ÷) y otro número. El resultado se añade a tus fichas y los dos usados se tachan. Cada número se usa <b>una sola vez</b>.</div></div>
-  <div class="tut-step"><div class="tut-num">3</div><div class="tut-text">No valen <b>resultados negativos ni divisiones inexactas</b>. Puedes usar todos los números o solo algunos.</div></div>
-  <div class="tut-step"><div class="tut-num">4</div><div class="tut-text">Tu resultado es la <b>cifra más cercana al meta</b> que generes en cualquier momento. Solo mejora: <b>reiniciar</b> no te la quita. <b>Puedes pasarte.</b></div></div>
-  <div class="tut-step"><div class="tut-num">★</div><div class="tut-text">Clavar el meta exacto es una <b>diana</b>. La partida es a 10, 15 o 20 rondas.</div></div>
+  <div class="tut-step"><div class="tut-num">1</div><div class="tut-text">Recibes <b>seis números</b> y un <b>número meta</b>. Acércate lo máximo posible al meta combinando los números.</div></div>
+  <div class="tut-step"><div class="tut-num">2</div><div class="tut-text">Tocas un número, un <b>operador</b> (+, −, ×, ÷) y otro número. El resultado se añade a tus fichas y los usados se tachan. Cada número se usa <b>una vez</b>.</div></div>
+  <div class="tut-step"><div class="tut-num">3</div><div class="tut-text">No valen <b>negativos ni divisiones inexactas</b>. Puedes usar todos los números o solo algunos. Tu resultado es la <b>cifra más cercana</b> que generes; reiniciar no te la quita. <b>Puedes pasarte.</b></div></div>
+  <div class="tut-step"><div class="tut-num">★</div><div class="tut-text">Online: el más cercano gana más puntos (como en las olimpiadas) y clavar el meta es <b>diana</b> con bonus. Gana quien más puntos sume en 10, 15 o 20 rondas.</div></div>
   <button class="btn-secondary btn tut-close" id="tut-close">cerrar</button>
 </div>
 
-<!-- SPLASH -->
 <div id="app-splash"><div class="splash-seal"><svg viewBox="0 0 64 64"><use href="#ico-abaco"/></svg></div></div>
 
 <!-- HOME -->
@@ -333,12 +275,11 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
   <div class="subtitle">cifras</div>
   <div class="btn-row">
     <button class="btn" id="btn-solo">Práctica</button>
-    <button class="btn btn-soon" id="btn-local" disabled>Local</button>
-    <button class="btn btn-soon" id="btn-online" disabled>Jugar online</button>
+    <button class="btn" id="btn-online">Jugar online</button>
   </div>
 </div>
 
-<!-- SETUP -->
+<!-- SETUP solo -->
 <div id="screen-setup" class="screen">
   <div class="seal"><svg><use href="#ico-abaco"/></svg></div>
   <div class="subtitle">práctica</div>
@@ -352,12 +293,68 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
   <div class="btn-back-row"><button class="btn-secondary btn" id="btn-setup-back">← volver</button></div>
 </div>
 
+<!-- ONLINE menú -->
+<div id="screen-online" class="screen">
+  <div class="seal"><svg><use href="#ico-abaco"/></svg></div>
+  <div class="subtitle">jugar online</div>
+  <div class="online-intro">Hasta 8 jugadores en la misma sala. Uno crea la sala y comparte el código; los demás se unen.</div>
+  <div class="btn-row">
+    <button class="btn" id="btn-create">Crear sala</button>
+    <button class="btn" id="btn-join">Unirse a sala</button>
+  </div>
+  <div class="btn-back-row"><button class="btn-secondary btn" id="btn-online-back">← volver</button></div>
+</div>
+
+<!-- ONLINE crear -->
+<div id="screen-create" class="screen">
+  <div class="seal"><svg><use href="#ico-abaco"/></svg></div>
+  <div class="subtitle">crear sala</div>
+  <div class="section-label">tu nombre</div>
+  <input id="create-name" class="name-input" type="text" maxlength="12" autocomplete="off" placeholder="nombre">
+  <button class="btn" id="btn-create-continue">Crear →</button>
+  <div class="btn-back-row"><button class="btn-secondary btn" id="btn-create-back">← volver</button></div>
+</div>
+
+<!-- ONLINE unirse -->
+<div id="screen-join" class="screen">
+  <div class="seal"><svg><use href="#ico-abaco"/></svg></div>
+  <div class="subtitle">unirse a sala</div>
+  <div class="section-label">código de la sala</div>
+  <input id="join-code" class="code-input" type="text" inputmode="latin" maxlength="4" autocomplete="off" placeholder="ABCD">
+  <div class="section-label">tu nombre</div>
+  <input id="join-name" class="name-input" type="text" maxlength="12" autocomplete="off" placeholder="nombre">
+  <div class="join-error" id="join-error"></div>
+  <button class="btn" id="btn-join-continue">Entrar →</button>
+  <div class="btn-back-row"><button class="btn-secondary btn" id="btn-join-back">← volver</button></div>
+</div>
+
+<!-- LOBBY -->
+<div id="screen-lobby" class="screen">
+  <div class="seal pulsing"><svg><use href="#ico-abaco"/></svg></div>
+  <div class="room-code-label">código de la sala</div>
+  <div class="room-code mono" id="lobby-code">····</div>
+  <div class="section-label">jugadores</div>
+  <div class="lobby-players" id="lobby-players"></div>
+  <div id="host-actions" style="display:none">
+    <div class="section-label">rondas</div>
+    <div class="cards" id="lobby-rounds">
+      <button class="card selected" data-rounds="10"><div class="c-roman">X</div><div class="c-name">10 rondas</div></button>
+      <button class="card" data-rounds="15"><div class="c-roman">XV</div><div class="c-name">15 rondas</div></button>
+      <button class="card" data-rounds="20"><div class="c-roman">XX</div><div class="c-name">20 rondas</div></button>
+    </div>
+    <button class="btn" id="btn-start-game">Empezar →</button>
+  </div>
+  <div id="guest-waiting" class="guest-waiting" style="display:none">esperando a que el anfitrión empiece<span class="dots"></span></div>
+  <div class="btn-back-row"><button class="btn-secondary btn" id="btn-lobby-leave">salir</button></div>
+</div>
+
 <!-- JUEGO -->
 <div id="screen-game" class="screen">
+  <div class="online-banner" id="online-banner"></div>
   <div class="game-head">
     <div class="status-bar">
       <div class="stat-chip"><div class="cv" id="st-round">1/10</div><div class="cl">ronda</div></div>
-      <div class="stat-chip"><div class="cv" id="st-diana">0</div><div class="cl">dianas</div></div>
+      <div class="stat-chip"><div class="cv" id="st-score">0</div><div class="cl" id="st-score-l">dianas</div></div>
       <div class="stat-chip clock"><div class="cv" id="st-clock">60</div><div class="cl">segundos</div></div>
     </div>
     <div class="target-wrap">
@@ -365,7 +362,6 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
       <div class="target-num mono" id="target-num">000</div>
     </div>
   </div>
-
   <div class="board-wrap">
     <div class="tiles" id="tiles"></div>
     <div class="ops" id="ops">
@@ -375,16 +371,16 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
       <button class="op" data-op="÷">÷</button>
     </div>
     <div class="build" id="build">
-      <span class="slot" id="slot-a">·</span>
-      <span class="slot" id="slot-op">·</span>
-      <span class="slot" id="slot-b">·</span>
-      <span class="eq">=</span>
-      <span class="res" id="slot-res">·</span>
+      <span class="slot" id="slot-a">·</span><span class="slot" id="slot-op">·</span><span class="slot" id="slot-b">·</span>
+      <span class="eq">=</span><span class="res" id="slot-res">·</span>
       <button class="btn-eq" id="btn-eq" disabled>=</button>
     </div>
     <div class="best-line" id="best-line">tu cifra: —</div>
+    <div class="wait-veil" id="wait-veil">
+      <div class="wv-fig mono" id="wv-fig">—</div>
+      <div class="wv-txt">te has plantado · esperando al resto<span class="dots"></span></div>
+    </div>
   </div>
-
   <div class="game-foot">
     <button class="btn-secondary btn" id="btn-reset">reiniciar</button>
     <button class="btn-secondary btn" id="btn-stand">plantarse</button>
@@ -398,12 +394,13 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
   <div class="r-figure mono" id="r-figure">—</div>
   <div class="r-dist" id="r-dist"></div>
   <div class="r-best" id="r-best"></div>
+  <div id="r-rank"></div>
 </div>
 
 <!-- FINAL -->
 <div id="final">
   <div class="f-star">★</div>
-  <div class="f-label">práctica completada</div>
+  <div class="f-label" id="f-label">práctica completada</div>
   <div class="f-figure" id="f-figure">—</div>
   <div class="f-sub" id="f-sub"></div>
   <div class="f-stats">
@@ -411,24 +408,28 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
     <div class="f-stat"><span class="v mono" id="f-avg">0</span><span class="l">dist. media</span></div>
     <div class="f-stat"><span class="v mono" id="f-rounds">0</span><span class="l">rondas</span></div>
   </div>
+  <div id="f-standings"></div>
   <div class="f-btns">
     <button class="btn" id="btn-again">Otra vez</button>
     <button class="btn-secondary btn" id="btn-home">← menú</button>
   </div>
 </div>
 
+<div id="toast"></div>
+
 <script>
 "use strict";
 const $ = id => document.getElementById(id);
 
-/* =====================================================================
-   NÚCLEO DEL JUEGO (cifras)
-   ===================================================================== */
+/* ===================== NÚCLEO (cifras) ===================== */
 const LARGES = [25, 50, 75, 100];
-const ROUND_SECONDS = 60;   // ajustable
+const ROUND_SECONDS = 60;     // ajustable
+const DIANA_BONUS = 2;        // puntos extra por clavar el meta (confirmar valor)
+const REVEAL_MS = 3400;
+const COLORS = ['#d4632a','#4a8a7b','#c9a44a','#9c5fa0','#a85a3d','#5e8aa0','#a87a4c','#7a9050'];
 
 function genRound() {
-  const nLarge = Math.floor(Math.random() * 5);            // 0..4 grandes
+  const nLarge = Math.floor(Math.random() * 5);
   const pool = [...LARGES].sort(() => Math.random() - 0.5);
   const nums = pool.slice(0, nLarge);
   const bag = []; for (let v = 1; v <= 10; v++) { bag.push(v); bag.push(v); }
@@ -447,7 +448,6 @@ function combine(a, b, op) {
   if (!Number.isInteger(r) || r < 1) return null;
   return r;
 }
-// Mejor solución posible (búsqueda completa; 6 fichas → espacio pequeño)
 function solveBest(nums, target) {
   let best = { v: null, d: Infinity };
   (function rec(arr) {
@@ -459,159 +459,142 @@ function solveBest(nums, target) {
         const r = combine(arr[i], arr[j], op);
         if (r == null) continue;
         const rest = arr.filter((_, k) => k !== i && k !== j); rest.push(r);
-        rec(rest);
-        if (best.d === 0) return;
+        rec(rest); if (best.d === 0) return;
       }
     }
   })(nums);
   return best;
 }
+// Reparto olímpico (ranking de competición + bonus diana)
+function rankPoints(subs, target) {
+  const N = subs.length;
+  const wd = subs.map(s => ({ ...s, dist: s.figure > 0 ? Math.abs(s.figure - target) : Infinity }));
+  wd.sort((a, b) => a.dist - b.dist);
+  let rank = 1;
+  return wd.map((s, i) => {
+    if (i > 0 && s.dist > wd[i - 1].dist) rank = i + 1;
+    let pts = N - rank + 1;
+    if (s.dist === 0) pts += DIANA_BONUS;
+    return { ...s, pos: rank, pts };
+  });
+}
 
-/* =====================================================================
-   ESTADO
-   ===================================================================== */
+/* ===================== ESTADO ===================== */
+let online = false;
 let totalRounds = 10;
-let round = 0;
-let target = 0;
-let tiles = [];            // {id, value, used, gen}
-let nextId = 0;
-let best = null;           // {value, dist}
+let round = 0, target = 0;
+let tiles = [], nextId = 0, best = null;
 let sel = { a: null, op: null, b: null };
 let roundActive = false;
-let timeLeft = ROUND_SECONDS;
-let timerIv = null;
-let history = [];          // {round, figure, dist, diana, bestV}
+let timeLeft = ROUND_SECONDS, timerIv = null, roundLocalStart = 0;
+let history = [];
+let mySubmitted = false;
 
-/* =====================================================================
-   PANTALLAS
-   ===================================================================== */
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
   $(id).classList.add('visible');
 }
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2600);
+}
 
-/* =====================================================================
-   RONDA
-   ===================================================================== */
-function startGame() {
-  round = 0; history = [];
-  document.body.classList.add('in-game');
-  show('screen-game');
-  startMusicGame();
-  nextRound();
-}
-function nextRound() {
-  round++;
-  const r = genRound();
-  target = r.target;
-  tiles = r.nums.map(v => ({ id: nextId++, value: v, used: false, gen: false }));
-  best = null;
-  sel = { a: null, op: null, b: null };
-  roundActive = true;
-  timeLeft = ROUND_SECONDS;
-  $('st-round').textContent = round + '/' + totalRounds;
-  $('st-diana').textContent = history.filter(h => h.diana).length;
+/* ===================== RONDA (común) ===================== */
+function setupRoundBoard(nums, tg) {
+  target = tg;
+  tiles = nums.map(v => ({ id: nextId++, value: v, used: false, gen: false }));
+  best = null; sel = { a: null, op: null, b: null };
+  roundActive = true; mySubmitted = false;
+  $('wait-veil').classList.remove('on');
   $('target-num').textContent = target;
-  renderTiles(); renderBuild(); renderBest(); renderClock();
-  startTimer();
+  renderTiles(); renderBuild(); renderBest();
 }
-function startTimer() {
-  stopTimer();
-  timerIv = setInterval(() => {
-    timeLeft--;
-    renderClock();
-    if (timeLeft <= 5 && timeLeft > 0) sfx('tick');
-    if (timeLeft <= 0) { stopTimer(); endRound(); }
-  }, 1000);
-}
-function stopTimer() { if (timerIv) { clearInterval(timerIv); timerIv = null; } }
 function renderClock() {
   const el = $('st-clock');
-  el.textContent = Math.max(0, timeLeft);
+  el.textContent = Math.max(0, Math.ceil(timeLeft));
   el.classList.toggle('warn', timeLeft <= 5);
 }
+function startTimer() {
+  stopTimer(); roundLocalStart = Date.now(); timeLeft = ROUND_SECONDS; renderClock();
+  timerIv = setInterval(() => {
+    timeLeft = ROUND_SECONDS - (Date.now() - roundLocalStart) / 1000;
+    renderClock();
+    if (timeLeft <= 5 && timeLeft > 0 && Math.abs(timeLeft - Math.round(timeLeft)) < 0.08) sfx('tick');
+    if (timeLeft <= 0) { stopTimer(); onTimeUp(); }
+  }, 200);
+}
+function stopTimer() { if (timerIv) { clearInterval(timerIv); timerIv = null; } }
 
-function endRound() {
-  if (!roundActive) return;
-  roundActive = false;
-  stopTimer();
+function onTimeUp() { if (!roundActive) return; if (online) submitOnline(); else finishSoloRound(); }
+function stand() { if (!roundActive) return; ensureAudio(); sfx('select'); if (online) submitOnline(); else finishSoloRound(); }
+
+/* ----- SOLO ----- */
+function startSolo() {
+  online = false; round = 0; history = [];
+  $('st-score-l').textContent = 'dianas';
+  $('online-banner').textContent = '';
+  document.body.classList.add('in-game');
+  show('screen-game'); startMusicGame(); nextSoloRound();
+}
+function nextSoloRound() {
+  round++;
+  const r = genRound();
+  $('st-round').textContent = round + '/' + totalRounds;
+  $('st-score').textContent = history.filter(h => h.diana).length;
+  setupRoundBoard(r.nums, r.target);
+  startTimer();
+}
+function finishSoloRound() {
+  roundActive = false; stopTimer();
   const figure = best ? best.value : 0;
   const dist = best ? best.dist : Infinity;
   const diana = best ? best.dist === 0 : false;
   const sol = solveBest(tiles.filter(t => !t.gen).map(t => t.value), target);
   history.push({ round, figure, dist, diana, bestV: sol.v });
-  reveal(figure, dist, diana, sol);
+  revealSolo(figure, dist, diana, sol);
 }
-
-const REVEAL_MS = 3200;
-function reveal(figure, dist, diana, sol) {
+function revealSolo(figure, dist, diana, sol) {
   const rv = $('reveal');
-  rv.classList.toggle('diana', diana);
+  rv.classList.remove('multi'); rv.classList.toggle('diana', diana);
   $('r-round').textContent = 'ronda ' + round;
   $('r-figure').textContent = best ? figure : '—';
-  if (diana) {
-    $('r-dist').textContent = '¡diana! has clavado el meta';
-  } else if (best) {
-    $('r-dist').textContent = 'a ' + dist + ' del meta (' + target + ')';
-  } else {
-    $('r-dist').textContent = 'sin cifra esta ronda';
-  }
-  $('r-best').textContent = (sol.d === 0)
-    ? 'el meta tenía solución exacta'
-    : 'lo más cerca posible era ' + sol.v + ' (a ' + sol.d + ')';
+  $('r-dist').textContent = diana ? '¡diana! has clavado el meta'
+    : (best ? 'a ' + dist + ' del meta (' + target + ')' : 'sin cifra esta ronda');
+  $('r-best').textContent = (sol.d === 0) ? 'el meta tenía solución exacta' : 'lo más cerca posible era ' + sol.v + ' (a ' + sol.d + ')';
   rv.classList.add('visible');
-
   setTimeout(() => sfx('gavel'), 250);
-  if (diana) setTimeout(() => sfx('diana'), 500);
-  else setTimeout(() => sfx('chime'), 480);
-  setTimeout(() => {
-    const phrase = diana
-      ? '¡Diana! Has clavado ' + target + '.'
-      : (best ? 'Tu cifra: ' + figure + '. A ' + dist + ' del objetivo.' : 'Sin cifra esta ronda.');
-    speak(phrase);
-  }, 950);
-
-  setTimeout(() => {
-    rv.classList.remove('visible');
-    if (round >= totalRounds) endGame();
-    else nextRound();
-  }, REVEAL_MS);
+  setTimeout(() => sfx(diana ? 'diana' : 'chime'), 480);
+  setTimeout(() => speak(diana ? '¡Diana! Has clavado ' + target + '.' : (best ? 'Tu cifra: ' + figure + '. A ' + dist + ' del objetivo.' : 'Sin cifra esta ronda.')), 950);
+  setTimeout(() => { rv.classList.remove('visible'); if (round >= totalRounds) endGameSolo(); else nextSoloRound(); }, REVEAL_MS);
 }
-
-/* =====================================================================
-   FIN
-   ===================================================================== */
-function endGame() {
-  document.body.classList.remove('in-game');
-  stopMusicGame();
+function endGameSolo() {
+  document.body.classList.remove('in-game'); stopMusicGame();
   const dianas = history.filter(h => h.diana).length;
   const scored = history.filter(h => h.figure > 0);
   const avg = scored.length ? Math.round(scored.reduce((s, h) => s + h.dist, 0) / scored.length) : 0;
-  $('f-diana').textContent = dianas;
-  $('f-avg').textContent = avg;
-  $('f-rounds').textContent = totalRounds;
-  let verdict;
-  if (dianas === totalRounds) verdict = 'perfecto';
-  else if (dianas >= totalRounds * 0.6) verdict = 'excelente';
-  else if (dianas >= totalRounds * 0.3) verdict = 'muy bien';
-  else if (avg <= 5) verdict = 'buena puntería';
-  else verdict = 'a seguir practicando';
-  $('f-figure').textContent = verdict;
+  $('final').classList.remove('multi');
+  $('f-label').textContent = 'práctica completada';
+  $('f-diana').textContent = dianas; $('f-avg').textContent = avg; $('f-rounds').textContent = totalRounds;
+  let v;
+  if (dianas === totalRounds) v = 'perfecto';
+  else if (dianas >= totalRounds * 0.6) v = 'excelente';
+  else if (dianas >= totalRounds * 0.3) v = 'muy bien';
+  else if (avg <= 5) v = 'buena puntería';
+  else v = 'a seguir practicando';
+  $('f-figure').textContent = v;
   $('f-sub').innerHTML = '<b>' + dianas + '</b> dianas de <b>' + totalRounds + '</b>';
+  $('btn-again').style.display = ''; $('btn-home').textContent = '← menú';
   $('final').classList.add('visible');
   setTimeout(() => sfx('win'), 400);
   setTimeout(() => speak(dianas + ' dianas de ' + totalRounds + '.'), 1300);
 }
 
-/* =====================================================================
-   RENDER
-   ===================================================================== */
+/* ===================== RENDER calculadora ===================== */
 function renderTiles() {
   const cont = $('tiles'); cont.innerHTML = '';
   tiles.forEach(t => {
     const b = document.createElement('button');
-    b.className = 'tile' + (t.gen ? ' gen' : '') + (t.used ? ' used' : '') +
-      (sel.a === t.id || sel.b === t.id ? ' sel' : '');
+    b.className = 'tile' + (t.gen ? ' gen' : '') + (t.used ? ' used' : '') + (sel.a === t.id || sel.b === t.id ? ' sel' : '');
     b.textContent = t.value;
     b.addEventListener('click', () => onTile(t.id));
     cont.appendChild(b);
@@ -620,20 +603,14 @@ function renderTiles() {
 function renderBuild() {
   const a = sel.a != null ? tiles.find(t => t.id === sel.a) : null;
   const b = sel.b != null ? tiles.find(t => t.id === sel.b) : null;
-  $('slot-a').textContent = a ? a.value : '·';
-  $('slot-a').classList.toggle('filled', !!a);
-  $('slot-op').textContent = sel.op || '·';
-  $('slot-op').classList.toggle('filled', !!sel.op);
-  $('slot-b').textContent = b ? b.value : '·';
-  $('slot-b').classList.toggle('filled', !!b);
+  $('slot-a').textContent = a ? a.value : '·'; $('slot-a').classList.toggle('filled', !!a);
+  $('slot-op').textContent = sel.op || '·'; $('slot-op').classList.toggle('filled', !!sel.op);
+  $('slot-b').textContent = b ? b.value : '·'; $('slot-b').classList.toggle('filled', !!b);
   document.querySelectorAll('.op').forEach(o => o.classList.toggle('sel', o.dataset.op === sel.op));
-
   const res = (a && b && sel.op) ? combine(a.value, b.value, sel.op) : null;
   const resEl = $('slot-res');
-  if (a && b && sel.op) {
-    if (res == null) { resEl.textContent = '✕'; resEl.classList.add('bad'); }
-    else { resEl.textContent = res; resEl.classList.remove('bad'); }
-  } else { resEl.textContent = '·'; resEl.classList.remove('bad'); }
+  if (a && b && sel.op) { if (res == null) { resEl.textContent = '✕'; resEl.classList.add('bad'); } else { resEl.textContent = res; resEl.classList.remove('bad'); } }
+  else { resEl.textContent = '·'; resEl.classList.remove('bad'); }
   $('btn-eq').disabled = res == null;
 }
 function renderBest() {
@@ -642,84 +619,327 @@ function renderBest() {
   if (best.dist === 0) { el.innerHTML = 'tu cifra: <b class="diana">' + best.value + '</b> · ¡diana!'; return; }
   el.innerHTML = 'tu cifra: <b>' + best.value + '</b> · a ' + best.dist + ' del meta';
 }
-
-/* =====================================================================
-   INTERACCIÓN
-   ===================================================================== */
 function onTile(id) {
-  if (!roundActive) return;
-  const t = tiles.find(x => x.id === id);
-  if (!t || t.used) return;
+  if (!roundActive || mySubmitted) return;
+  const t = tiles.find(x => x.id === id); if (!t || t.used) return;
   ensureAudio(); sfx('select');
-  // toggle deselección
   if (sel.a === id) { sel.a = sel.b; sel.b = null; }
   else if (sel.b === id) { sel.b = null; }
   else if (sel.a == null) sel.a = id;
   else if (sel.b == null) sel.b = id;
-  else { sel.a = id; sel.b = null; }   // reemplaza el primero
+  else { sel.a = id; sel.b = null; }
   renderTiles(); renderBuild();
 }
-function onOp(op) {
-  if (!roundActive) return;
-  ensureAudio(); sfx('select');
-  sel.op = (sel.op === op) ? null : op;
-  renderBuild();
-}
+function onOp(op) { if (!roundActive || mySubmitted) return; ensureAudio(); sfx('select'); sel.op = (sel.op === op) ? null : op; renderBuild(); }
 function commit() {
-  if (!roundActive) return;
-  const a = tiles.find(t => t.id === sel.a);
-  const b = tiles.find(t => t.id === sel.b);
+  if (!roundActive || mySubmitted) return;
+  const a = tiles.find(t => t.id === sel.a), b = tiles.find(t => t.id === sel.b);
   if (!a || !b || !sel.op) return;
   const r = combine(a.value, b.value, sel.op);
   if (r == null) { sfx('bad'); return; }
   a.used = true; b.used = true;
-  const ng = { id: nextId++, value: r, used: false, gen: true };
-  tiles.push(ng);
-  // mejor cifra: solo cuentan las generadas (≥1 operación)
+  tiles.push({ id: nextId++, value: r, used: false, gen: true });
   const d = Math.abs(r - target);
   if (best == null || d < best.dist) best = { value: r, dist: d };
   sel = { a: null, op: null, b: null };
   sfx(d === 0 ? 'diana' : 'commit');
   renderTiles(); renderBuild(); renderBest();
-  // animación de aparición en la última ficha
   const last = $('tiles').lastChild; if (last) last.classList.add('appear');
-  if (d === 0) { /* diana en vivo: pequeño realce, la ronda sigue por si quieren plantarse */ }
 }
 function resetRound() {
-  if (!roundActive) return;
+  if (!roundActive || mySubmitted) return;
   ensureAudio(); sfx('select');
-  tiles = tiles.filter(t => !t.gen);
-  tiles.forEach(t => t.used = false);
+  tiles = tiles.filter(t => !t.gen); tiles.forEach(t => t.used = false);
   sel = { a: null, op: null, b: null };
-  renderTiles(); renderBuild();   // best se conserva
-}
-function stand() {
-  if (!roundActive) return;
-  ensureAudio(); sfx('select');
-  endRound();
+  renderTiles(); renderBuild();
 }
 
 /* =====================================================================
-   AUDIO (SFX procedural + música) y VOZ
+   ONLINE — Firebase REST + polling (mismo proyecto que Subasta)
    ===================================================================== */
-let muted = false;
-try { muted = localStorage.getItem('abaco_muted') === '1'; } catch (e) {}
+const DB_URL = 'https://subasta-de-tiempo-default-rtdb.europe-west1.firebasedatabase.app';
+const BASE = 'g/abaco/rooms';      // esquema unificado /g/{gameId}/rooms
+const GRACE_MS = 3500;
+const HEARTBEAT_INTERVAL = 2000, HEARTBEAT_TIMEOUT = 6000;
+
+let myId = '';
+try { myId = localStorage.getItem('abaco_id') || ''; } catch (e) {}
+if (!myId) { myId = 'p' + Math.random().toString(36).slice(2, 10); try { localStorage.setItem('abaco_id', myId); } catch (e) {} }
+let myName = '', roomCode = null, amHost = false, roomData = null;
+let pollTimer = null, pollLast = null, hbTimer = null;
+let lastRevealedRound = 0, hostRoundStartLocal = 0;
+
+async function fbFetch(path, opts) {
+  try { const r = await fetch(DB_URL + '/' + path + '.json', Object.assign({ mode: 'cors' }, opts || {})); if (!r.ok) return null; return r.json(); }
+  catch (e) { return null; }
+}
+const SV = { '.sv': 'timestamp' };
+const fbGet = p => fbFetch(p);
+const fbSet = (p, v) => fbFetch(p, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(v) });
+const fbUpd = (base, data) => Promise.all(Object.entries(data).map(([k, v]) =>
+  fbFetch(base + '/' + k, v === null ? { method: 'DELETE' } : { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(v) })));
+const fbDel = p => fbFetch(p, { method: 'DELETE' });
+
+function startPoll() {
+  stopPoll();
+  const tick = () => {
+    fbGet(BASE + '/' + roomCode).then(data => {
+      const s = JSON.stringify(data);
+      if (s !== pollLast) { pollLast = s; roomData = data; handleRoom(); }
+      if (roomCode) pollTimer = setTimeout(tick, 400);
+    }).catch(() => { if (roomCode) pollTimer = setTimeout(tick, 400); });
+  };
+  tick();
+}
+function stopPoll() { clearTimeout(pollTimer); pollTimer = null; pollLast = null; }
+function startHeartbeat() {
+  stopHeartbeat();
+  const beat = () => { if (roomCode) fbSet(BASE + '/' + roomCode + '/players/' + myId + '/lastSeen', Date.now()); };
+  beat(); hbTimer = setInterval(beat, HEARTBEAT_INTERVAL);
+}
+function stopHeartbeat() { if (hbTimer) { clearInterval(hbTimer); hbTimer = null; } }
+function isConnected(p) { return p && p.lastSeen && (Date.now() - p.lastSeen < HEARTBEAT_TIMEOUT); }
+function connectedIds() { const pl = (roomData && roomData.players) || {}; return Object.keys(pl).filter(id => isConnected(pl[id])); }
+function currentHostId() {
+  const pl = (roomData && roomData.players) || {};
+  const arr = Object.keys(pl).filter(id => isConnected(pl[id])).map(id => ({ id, j: pl[id].joinedAt || 0 }));
+  if (!arr.length) return null;
+  arr.sort((a, b) => (a.j - b.j) || (a.id < b.id ? -1 : 1));
+  return arr[0].id;
+}
+function genCode() { const L = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; let s = ''; for (let i = 0; i < 4; i++) s += L[Math.floor(Math.random() * L.length)]; return s; }
+
+async function createRoom() {
+  let code;
+  for (let i = 0; i < 6; i++) { code = genCode(); const ex = await fbGet(BASE + '/' + code); if (!ex) break; }
+  roomCode = code;
+  await fbSet(BASE + '/' + code, {
+    code, createdAt: SV, state: 'lobby', mode: { rounds: 10 }, currentRound: 0,
+    players: { [myId]: { name: myName, colorIdx: 0, score: 0, joinedAt: SV, lastSeen: Date.now() } }
+  });
+  enterLobby();
+}
+async function joinRoom(code) {
+  const data = await fbGet(BASE + '/' + code);
+  if (!data) { $('join-error').textContent = 'no existe esa sala'; return; }
+  if (data.state !== 'lobby') { $('join-error').textContent = 'la partida ya ha empezado'; return; }
+  const n = Object.keys(data.players || {}).length;
+  if (n >= 8) { $('join-error').textContent = 'la sala está llena (8)'; return; }
+  roomCode = code;
+  await fbUpd(BASE + '/' + code + '/players/' + myId, { name: myName, colorIdx: n, score: 0, joinedAt: SV, lastSeen: Date.now() });
+  enterLobby();
+}
+function enterLobby() {
+  online = true; lastRevealedRound = 0;
+  show('screen-lobby'); $('lobby-code').textContent = roomCode;
+  startMusicMenu(); startHeartbeat(); startPoll();
+}
+function handleRoom() {
+  if (!roomData) { if (roomCode) { toast('sala cerrada'); leaveRoom(); } return; }
+  amHost = currentHostId() === myId;
+
+  if (roomData.state === 'lobby') {
+    if (!$('screen-lobby').classList.contains('visible')) { if ($('final').classList.contains('visible')) { $('final').classList.remove('visible'); } show('screen-lobby'); $('lobby-code').textContent = roomCode; }
+    $('host-actions').style.display = amHost ? 'block' : 'none';
+    $('guest-waiting').style.display = amHost ? 'none' : 'block';
+    syncRoundCardSelection();
+    renderLobbyPlayers();
+  }
+  if (roomData.state === 'playing') {
+    totalRounds = (roomData.mode && roomData.mode.rounds) || 10;
+    // entrar a una ronda nueva
+    if (roomData.round && roomData.round.n > round && !$('reveal').classList.contains('visible')) {
+      enterOnlineRound(roomData.round);
+    }
+    // mostrar reveal cuando el host publica el resultado de la ronda actual
+    if (roomData.result && roomData.result.round > lastRevealedRound) {
+      lastRevealedRound = roomData.result.round; stopTimer();
+      revealOnline(roomData.result);
+    }
+    if (amHost) hostTick();
+  }
+  if (roomData.state === 'ended') { if (!$('final').classList.contains('visible')) endGameOnline(); }
+}
+function syncRoundCardSelection() {
+  const r = (roomData.mode && roomData.mode.rounds) || 10;
+  $('lobby-rounds').querySelectorAll('.card').forEach(c => c.classList.toggle('selected', parseInt(c.dataset.rounds, 10) === r));
+}
+function renderLobbyPlayers() {
+  const wrap = $('lobby-players'); wrap.innerHTML = '';
+  const pl = roomData.players || {};
+  const hostId = currentHostId();
+  Object.entries(pl).map(([id, p]) => ({ id, ...p })).sort((a, b) => (a.joinedAt || 0) - (b.joinedAt || 0)).forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'lobby-player' + (p.id === myId ? ' me' : '') + (isConnected(p) ? '' : ' disconnected');
+    el.style.setProperty('--p-color', COLORS[p.colorIdx % COLORS.length]);
+    el.innerHTML = '<span class="dot"></span><span class="nm">' + escapeHtml(p.name || '—') + '</span>' +
+      '<span class="tag">' + (p.id === hostId ? 'anfitrión' : (p.id === myId ? 'tú' : '')) + '</span>';
+    wrap.appendChild(el);
+  });
+}
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+/* ---- HOST ---- */
+function hostStartGame() {
+  if (!amHost) return;
+  const r = genRound();
+  hostRoundStartLocal = Date.now();
+  fbUpd(BASE + '/' + roomCode, {
+    state: 'playing', currentRound: 1, result: null,
+    round: { n: 1, nums: r.nums, target: r.target, startAt: SV },
+    subs: null
+  });
+}
+function hostTick() {
+  if (!roomData || roomData.state !== 'playing' || !roomData.round) return;
+  if (roomData.result && roomData.result.round === roomData.currentRound) return; // ya resuelta, esperando avance
+  const n = roomData.currentRound;
+  const subs = (roomData.subs && roomData.subs['r' + n]) || {};
+  const conn = connectedIds();
+  const allIn = conn.length > 0 && conn.every(id => subs[id] !== undefined);
+  const deadline = hostRoundStartLocal + (ROUND_SECONDS * 1000) + GRACE_MS;
+  if (allIn || (hostRoundStartLocal && Date.now() > deadline)) hostResolveRound(n, subs, conn);
+}
+function hostResolveRound(n, subs, conn) {
+  // autorrellenar a los que no enviaron (0 = último)
+  const players = roomData.players || {};
+  const ids = Object.keys(players);
+  const entries = ids.map(id => {
+    const s = subs[id];
+    return { id, figure: s ? (s.figure || 0) : 0 };
+  });
+  const ranked = rankPoints(entries, roomData.round.target);
+  // sumar puntos
+  const scoreUpd = {};
+  ranked.forEach(r => { scoreUpd['players/' + r.id + '/score'] = (players[r.id].score || 0) + r.pts; });
+  const ranking = ranked.map(r => ({ id: r.id, name: players[r.id].name, colorIdx: players[r.id].colorIdx, figure: r.figure, dist: r.dist === Infinity ? -1 : r.dist, pos: r.pos, pts: r.pts }));
+  fbUpd(BASE + '/' + roomCode, Object.assign({ result: { round: n, target: roomData.round.target, ranking } }, scoreUpd));
+  // tras el reveal, avanzar
+  setTimeout(() => { if (amHost) hostAdvance(n); }, REVEAL_MS + 200);
+}
+function hostAdvance(prevN) {
+  if (!amHost || !roomData) return;
+  if (prevN >= totalRounds) { fbUpd(BASE + '/' + roomCode, { state: 'ended' }); return; }
+  const r = genRound();
+  hostRoundStartLocal = Date.now();
+  fbUpd(BASE + '/' + roomCode, {
+    currentRound: prevN + 1, result: null,
+    round: { n: prevN + 1, nums: r.nums, target: r.target, startAt: SV }
+  });
+}
+
+/* ---- jugador en ronda online ---- */
+function enterOnlineRound(rnd) {
+  round = rnd.n;
+  if (!$('screen-game').classList.contains('visible')) { document.body.classList.add('in-game'); show('screen-game'); startMusicGame(); }
+  $('reveal').classList.remove('visible');
+  $('st-score-l').textContent = 'puntos';
+  $('st-score').textContent = (roomData.players[myId] && roomData.players[myId].score) || 0;
+  $('st-round').textContent = round + '/' + totalRounds;
+  $('online-banner').textContent = 'sala ' + roomCode + ' · ' + connectedIds().length + ' jugadores';
+  setupRoundBoard(rnd.nums.slice(), rnd.target);
+  startTimer();
+}
+function submitOnline() {
+  if (mySubmitted) return;
+  mySubmitted = true; roundActive = false; stopTimer();
+  const figure = best ? best.value : 0;
+  const dist = best ? best.dist : -1;
+  const diana = best ? best.dist === 0 : false;
+  $('wv-fig').textContent = best ? figure : 'sin cifra';
+  $('wait-veil').classList.add('on');
+  fbSet(BASE + '/' + roomCode + '/subs/r' + round + '/' + myId, { figure, dist, diana });
+}
+function revealOnline(result) {
+  roundActive = false; mySubmitted = false;
+  $('wait-veil').classList.remove('on');
+  const rv = $('reveal'); rv.classList.add('multi'); rv.classList.remove('diana');
+  $('r-round').textContent = 'ronda ' + result.round + ' · meta ' + result.target;
+  const rank = $('r-rank'); rank.innerHTML = '';
+  result.ranking.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'rk-row' + (r.id === myId ? ' me' : '') + (r.pos === 1 ? ' win' : '');
+    row.style.setProperty('--p-color', COLORS[r.colorIdx % COLORS.length]);
+    const figTxt = r.figure > 0 ? r.figure : '—';
+    const star = r.dist === 0 ? ' ★' : '';
+    row.innerHTML = '<span class="rk-pos">' + r.pos + '</span><span class="rk-dot"></span>' +
+      '<span class="rk-nm">' + escapeHtml(r.name) + star + '</span>' +
+      '<span class="rk-fig mono">' + figTxt + '</span><span class="rk-pts mono">+' + r.pts + '</span>';
+    rank.appendChild(row);
+  });
+  rv.classList.add('visible');
+  const winners = result.ranking.filter(r => r.pos === 1);
+  setTimeout(() => sfx('gavel'), 250);
+  setTimeout(() => sfx(winners.some(w => w.dist === 0) ? 'diana' : 'chime'), 480);
+  setTimeout(() => {
+    let phrase;
+    if (winners.length > 1) phrase = 'Empate en cabeza.';
+    else { const w = winners[0]; phrase = (w.dist === 0 ? '¡Diana de ' + w.name + '! ' : w.name + ' gana la ronda con ' + w.figure + '.'); }
+    speak(phrase);
+  }, 950);
+  setTimeout(() => { rv.classList.remove('visible'); }, REVEAL_MS);
+}
+function endGameOnline() {
+  document.body.classList.remove('in-game'); stopMusicGame(); stopTimer();
+  const pl = roomData.players || {};
+  const arr = Object.entries(pl).map(([id, p]) => ({ id, ...p, score: p.score || 0 })).sort((a, b) => b.score - a.score);
+  const winner = arr[0];
+  $('final').classList.add('multi');
+  $('f-label').textContent = 'fin de la partida';
+  $('f-figure').textContent = winner ? winner.name : '—';
+  $('f-sub').innerHTML = '<b>' + (winner ? winner.score : 0) + '</b> puntos';
+  const st = $('f-standings'); st.innerHTML = '';
+  arr.forEach((p, i) => {
+    const row = document.createElement('div');
+    row.className = 'rk-row' + (p.id === myId ? ' me' : '') + (i === 0 ? ' win' : '');
+    row.style.setProperty('--p-color', COLORS[p.colorIdx % COLORS.length]);
+    row.innerHTML = '<span class="rk-pos">' + (i + 1) + '</span><span class="rk-dot"></span>' +
+      '<span class="rk-nm">' + escapeHtml(p.name) + '</span><span class="rk-pts mono">' + p.score + '</span>';
+    st.appendChild(row);
+  });
+  $('btn-again').style.display = amHost ? '' : 'none';
+  $('btn-again').textContent = 'Revancha';
+  $('btn-home').textContent = 'salir';
+  $('final').classList.add('visible');
+  setTimeout(() => sfx('win'), 400);
+  setTimeout(() => speak(winner ? winner.name + ' gana la partida con ' + winner.score + ' puntos.' : ''), 1300);
+}
+function rematchOnline() {
+  if (!amHost) return;
+  const pl = roomData.players || {};
+  const upd = { state: 'lobby', currentRound: 0, result: null, round: null, subs: null };
+  Object.keys(pl).forEach(id => upd['players/' + id + '/score'] = 0);
+  $('final').classList.remove('visible');
+  fbUpd(BASE + '/' + roomCode, upd);
+}
+async function leaveRoom() {
+  stopPoll(); stopHeartbeat(); stopTimer();
+  const code = roomCode; const id = myId;
+  online = false; roomCode = null; roomData = null; amHost = false;
+  document.body.classList.remove('in-game');
+  $('final').classList.remove('visible'); $('reveal').classList.remove('visible'); $('wait-veil').classList.remove('on');
+  if (code) {
+    await fbDel(BASE + '/' + code + '/players/' + id).catch(() => {});
+    const rest = await fbGet(BASE + '/' + code + '/players');
+    if (!rest) fbDel(BASE + '/' + code).catch(() => {});   // sala vacía → borrar
+  }
+  show('screen-home'); startMusicMenu();
+}
+window.addEventListener('beforeunload', () => { if (roomCode) { try { navigator.sendBeacon(DB_URL + '/' + BASE + '/' + roomCode + '/players/' + myId + '.json', JSON.stringify(null)); } catch (e) {} } });
+
+/* ===================== AUDIO / VOZ / MÚSICA ===================== */
+let muted = false; try { muted = localStorage.getItem('abaco_muted') === '1'; } catch (e) {}
 let actx = null, mGain = null;
 function ensureAudio() {
-  if (!actx) {
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if (AC) { actx = new AC(); mGain = actx.createGain(); mGain.gain.value = muted ? 0 : 0.5; mGain.connect(actx.destination); }
-  }
+  if (!actx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) { actx = new AC(); mGain = actx.createGain(); mGain.gain.value = muted ? 0 : 0.5; mGain.connect(actx.destination); } }
   if (actx && actx.state === 'suspended') actx.resume();
 }
 function tone(freq, dur, type = 'sine', vol = 0.3, when = 0) {
   if (!actx || muted) return;
   const o = actx.createOscillator(), g = actx.createGain();
-  o.type = type; o.frequency.value = freq; g.gain.value = 0;
-  o.connect(g); g.connect(mGain);
+  o.type = type; o.frequency.value = freq; g.gain.value = 0; o.connect(g); g.connect(mGain);
   const t = actx.currentTime + when;
-  g.gain.linearRampToValueAtTime(vol, t + 0.012);
-  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  g.gain.linearRampToValueAtTime(vol, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
   o.start(t); o.stop(t + dur + 0.03);
 }
 function sfx(kind) {
@@ -729,59 +949,41 @@ function sfx(kind) {
   else if (kind === 'bad') tone(150, 0.16, 'sawtooth', 0.18);
   else if (kind === 'tick') tone(880, 0.04, 'square', 0.10);
   else if (kind === 'gavel') { tone(180, 0.12, 'triangle', 0.4); tone(90, 0.16, 'sine', 0.3, 0.01); }
-  else if (kind === 'chime') { [523, 784].forEach((f, i) => tone(f, 0.3, 'sine', 0.2, i * 0.08)); }
-  else if (kind === 'diana') { [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.25, 'triangle', 0.28, i * 0.09)); }
-  else if (kind === 'win') { [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, 0.3, 'triangle', 0.3, i * 0.11)); }
+  else if (kind === 'chime') [523, 784].forEach((f, i) => tone(f, 0.3, 'sine', 0.2, i * 0.08));
+  else if (kind === 'diana') [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.25, 'triangle', 0.28, i * 0.09));
+  else if (kind === 'win') [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, 0.3, 'triangle', 0.3, i * 0.11));
 }
 function speak(text) {
-  if (!('speechSynthesis' in window) || muted) return;
+  if (!('speechSynthesis' in window) || muted || !text) return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'es-ES'; u.rate = 0.98; u.pitch = 1.0;
-  const v = window.speechSynthesis.getVoices().find(x => /^es/i.test(x.lang));
-  if (v) u.voice = v;
+  const u = new SpeechSynthesisUtterance(text); u.lang = 'es-ES'; u.rate = 0.98; u.pitch = 1.0;
+  const v = window.speechSynthesis.getVoices().find(x => /^es/i.test(x.lang)); if (v) u.voice = v;
   window.speechSynthesis.speak(u);
 }
-function warmVoice() {
-  if ('speechSynthesis' in window) { const w = new SpeechSynthesisUtterance(' '); w.volume = 0; window.speechSynthesis.speak(w); }
-}
+function warmVoice() { if ('speechSynthesis' in window) { const w = new SpeechSynthesisUtterance(' '); w.volume = 0; window.speechSynthesis.speak(w); } }
 if ('speechSynthesis' in window) { window.speechSynthesis.getVoices(); window.speechSynthesis.addEventListener?.('voiceschanged', () => window.speechSynthesis.getVoices()); }
 
-// Música: menú en bucle; en juego, las 3 pistas encadenadas al azar y fluyendo sobre las rondas
 let menuEl = null, gameEls = [], curGame = null;
 function fade(el, target, ms) {
   if (!el) return;
   const steps = 20, st = ms / steps, start = el.volume; let i = 0;
-  const iv = setInterval(() => { i++; el.volume = Math.max(0, Math.min(1, start + (target - start) * (i / steps)));
-    if (i >= steps) { clearInterval(iv); if (target === 0) { try { el.pause(); } catch (e) {} } } }, st);
+  const iv = setInterval(() => { i++; el.volume = Math.max(0, Math.min(1, start + (target - start) * (i / steps))); if (i >= steps) { clearInterval(iv); if (target === 0) { try { el.pause(); } catch (e) {} } } }, st);
 }
-function startMusicMenu() {
-  if (muted) return;
-  if (!menuEl) menuEl = $('music-menu');
-  if (!menuEl || !menuEl.paused) return;
-  menuEl.volume = 0; menuEl.play().then(() => fade(menuEl, 0.45, 1000)).catch(() => {});
-}
+function startMusicMenu() { if (muted) return; if (!menuEl) menuEl = $('music-menu'); if (!menuEl || !menuEl.paused) return; menuEl.volume = 0; menuEl.play().then(() => fade(menuEl, 0.45, 1000)).catch(() => {}); }
 function stopMusicMenu() { if (!menuEl) menuEl = $('music-menu'); if (menuEl && !menuEl.paused) fade(menuEl, 0, 500); }
 function pickGameTrack() {
   if (muted || !gameEls.length) return;
   const others = gameEls.filter(e => e !== curGame);
   const el = others[Math.floor(Math.random() * others.length)] || gameEls[0];
-  curGame = el; el.currentTime = 0; el.volume = 0;
-  el.play().then(() => fade(el, 0.4, 900)).catch(() => {});
+  curGame = el; el.currentTime = 0; el.volume = 0; el.play().then(() => fade(el, 0.4, 900)).catch(() => {});
 }
 function startMusicGame() {
   stopMusicMenu();
-  if (!gameEls.length) {
-    gameEls = [$('music-1'), $('music-2'), $('music-3')];
-    gameEls.forEach(el => el && el.addEventListener('ended', () => { if (document.body.classList.contains('in-game')) pickGameTrack(); }));
-  }
+  if (!gameEls.length) { gameEls = [$('music-1'), $('music-2'), $('music-3')]; gameEls.forEach(el => el && el.addEventListener('ended', () => { if (document.body.classList.contains('in-game')) pickGameTrack(); })); }
   if (muted) return;
-  pickGameTrack();
+  if (!curGame || curGame.paused) pickGameTrack();
 }
-function stopMusicGame() {
-  gameEls.forEach(el => { if (el) fade(el, 0, 500); }); curGame = null;
-  setTimeout(startMusicMenu, 600);
-}
+function stopMusicGame() { gameEls.forEach(el => { if (el) fade(el, 0, 500); }); curGame = null; setTimeout(startMusicMenu, 600); }
 function setMuted(m) {
   muted = m; try { localStorage.setItem('abaco_muted', m ? '1' : '0'); } catch (e) {}
   if (mGain && actx) mGain.gain.setTargetAtTime(m ? 0 : 0.5, actx.currentTime, 0.05);
@@ -789,62 +991,68 @@ function setMuted(m) {
   else { if (document.body.classList.contains('in-game')) startMusicGame(); else startMusicMenu(); }
 }
 
-/* =====================================================================
-   TEMA
-   ===================================================================== */
+/* ===================== TEMA ===================== */
 function applyTheme(light) {
   document.body.classList.toggle('light', light);
   document.documentElement.classList.remove('pre-light');
   document.querySelector('meta[name=theme-color]').setAttribute('content', light ? '#f3f2ee' : '#0b0b0c');
   try { localStorage.setItem('abaco_theme', light ? 'light' : 'dark'); } catch (e) {}
 }
-(function initTheme() {
-  let light = false;
-  try { light = localStorage.getItem('abaco_theme') === 'light'; } catch (e) {}
-  if (light) document.body.classList.add('light');
-})();
+(function initTheme() { let light = false; try { light = localStorage.getItem('abaco_theme') === 'light'; } catch (e) {} if (light) document.body.classList.add('light'); })();
 
-/* =====================================================================
-   CABLEADO
-   ===================================================================== */
+/* ===================== CABLEADO ===================== */
 $('btn-solo').addEventListener('click', () => { ensureAudio(); warmVoice(); startMusicMenu(); show('screen-setup'); });
 $('btn-setup-back').addEventListener('click', () => show('screen-home'));
-$('round-cards').addEventListener('click', e => {
-  const c = e.target.closest('.card'); if (!c) return;
-  $('round-cards').querySelectorAll('.card').forEach(x => x.classList.remove('selected'));
-  c.classList.add('selected'); totalRounds = parseInt(c.dataset.rounds, 10);
+$('round-cards').addEventListener('click', e => { const c = e.target.closest('.card'); if (!c) return; $('round-cards').querySelectorAll('.card').forEach(x => x.classList.remove('selected')); c.classList.add('selected'); totalRounds = parseInt(c.dataset.rounds, 10); });
+$('btn-play').addEventListener('click', () => { ensureAudio(); warmVoice(); startSolo(); });
+
+$('btn-online').addEventListener('click', () => { ensureAudio(); warmVoice(); startMusicMenu(); show('screen-online'); });
+$('btn-online-back').addEventListener('click', () => show('screen-home'));
+$('btn-create').addEventListener('click', () => { $('create-name').value = myName || ''; show('screen-create'); });
+$('btn-create-back').addEventListener('click', () => show('screen-online'));
+$('btn-create-continue').addEventListener('click', () => {
+  const n = $('create-name').value.trim(); if (!n) { toast('escribe tu nombre'); return; }
+  myName = n; ensureAudio(); $('btn-create-continue').disabled = true;
+  createRoom().finally(() => { $('btn-create-continue').disabled = false; });
 });
-$('btn-play').addEventListener('click', () => { ensureAudio(); warmVoice(); startGame(); });
+$('btn-join').addEventListener('click', () => { $('join-name').value = myName || ''; $('join-code').value = ''; $('join-error').textContent = ''; show('screen-join'); });
+$('btn-join-back').addEventListener('click', () => show('screen-online'));
+$('join-code').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase().replace(/[^A-Z]/g, ''); $('join-error').textContent = ''; });
+$('btn-join-continue').addEventListener('click', () => {
+  const code = $('join-code').value.trim().toUpperCase(); const n = $('join-name').value.trim();
+  if (code.length !== 4) { $('join-error').textContent = 'el código tiene 4 letras'; return; }
+  if (!n) { $('join-error').textContent = 'escribe tu nombre'; return; }
+  myName = n; ensureAudio(); $('btn-join-continue').disabled = true;
+  joinRoom(code).finally(() => { $('btn-join-continue').disabled = false; });
+});
+$('lobby-rounds').addEventListener('click', e => {
+  if (!amHost) return; const c = e.target.closest('.card'); if (!c) return;
+  $('lobby-rounds').querySelectorAll('.card').forEach(x => x.classList.remove('selected')); c.classList.add('selected');
+  fbSet(BASE + '/' + roomCode + '/mode', { rounds: parseInt(c.dataset.rounds, 10) });
+});
+$('btn-start-game').addEventListener('click', () => { ensureAudio(); warmVoice(); hostStartGame(); });
+$('btn-lobby-leave').addEventListener('click', leaveRoom);
 
 $('ops').addEventListener('click', e => { const o = e.target.closest('.op'); if (o) onOp(o.dataset.op); });
 $('btn-eq').addEventListener('click', commit);
 $('btn-reset').addEventListener('click', resetRound);
 $('btn-stand').addEventListener('click', stand);
 
-$('btn-again').addEventListener('click', () => { $('final').classList.remove('visible'); startGame(); });
-$('btn-home').addEventListener('click', () => { $('final').classList.remove('visible'); show('screen-home'); startMusicMenu(); });
+$('btn-again').addEventListener('click', () => { if (online) rematchOnline(); else { $('final').classList.remove('visible'); startSolo(); } });
+$('btn-home').addEventListener('click', () => { if (online) leaveRoom(); else { $('final').classList.remove('visible'); show('screen-home'); startMusicMenu(); } });
 
 $('theme-toggle').addEventListener('click', () => applyTheme(!document.body.classList.contains('light')));
 $('help-btn').addEventListener('click', () => $('tutorial-overlay').classList.add('visible'));
 $('tut-close').addEventListener('click', () => $('tutorial-overlay').classList.remove('visible'));
-(function initSound() {
-  const btn = $('sound-toggle');
-  if (muted) btn.classList.add('muted');
-  btn.addEventListener('click', () => { ensureAudio(); const nm = !btn.classList.contains('muted'); btn.classList.toggle('muted', nm); setMuted(nm); });
-})();
+(function initSound() { const btn = $('sound-toggle'); if (muted) btn.classList.add('muted'); btn.addEventListener('click', () => { ensureAudio(); const nm = !btn.classList.contains('muted'); btn.classList.toggle('muted', nm); setMuted(nm); }); })();
 
-/* =====================================================================
-   ARRANQUE
-   ===================================================================== */
+/* ===================== ARRANQUE ===================== */
 window.addEventListener('load', () => {
   setTimeout(() => { const s = $('app-splash'); s.classList.add('hiding'); setTimeout(() => s.style.display = 'none', 600); }, 2000);
   const kick = () => { ensureAudio(); startMusicMenu(); if (menuEl && !menuEl.paused) ['pointerdown', 'touchstart', 'click'].forEach(e => document.removeEventListener(e, kick)); };
   ['pointerdown', 'touchstart', 'click'].forEach(e => document.addEventListener(e, kick));
 });
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
-}
+if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {})); }
 </script>
 </body>
 </html>

@@ -1,7 +1,6 @@
-/* Service worker de El Ábaco — caché del shell + audio bajo demanda */
-const CACHE = 'abaco-v1';
+/* Service worker de El Ábaco — HTML siempre fresco, assets en caché */
+const CACHE = 'abaco-v2';
 
-// Esenciales: si falla algo aquí, la instalación no se rompe (se cachean uno a uno).
 const SHELL = [
   './',
   './index.html',
@@ -27,13 +26,31 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Cache-first para GET del mismo origen; la música (.mp3) se cachea la primera vez que suena.
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;   // fuentes de Google, etc. → red directa
 
+  const isHTML = req.mode === 'navigate' ||
+                 url.pathname.endsWith('/') ||
+                 url.pathname.endsWith('index.html');
+
+  if (isHTML) {
+    // network-first: siempre intenta la versión nueva; si no hay red, cae a la cacheada
+    e.respondWith(
+      fetch(req).then(resp => {
+        if (resp && resp.status === 200) {
+          const copy = resp.clone();
+          caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
+        }
+        return resp;
+      }).catch(() => caches.match(req).then(hit => hit || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // resto (iconos, mp3): cache-first con relleno
   e.respondWith(
     caches.match(req).then(hit => {
       if (hit) return hit;
@@ -43,7 +60,7 @@ self.addEventListener('fetch', e => {
           caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
         }
         return resp;
-      }).catch(() => caches.match('./index.html'));
+      });
     })
   );
 });
