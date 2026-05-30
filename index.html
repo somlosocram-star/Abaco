@@ -4,8 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0c">
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="El Ábaco">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="El Ábaco — la prueba de las cifras. Acércate al número meta combinando los números con +, −, × y ÷.">
 <title>El Ábaco · Cifras</title>
@@ -351,7 +358,7 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
     <div class="status-bar">
       <div class="stat-chip"><div class="cv" id="st-round">1/10</div><div class="cl">ronda</div></div>
       <div class="stat-chip"><div class="cv" id="st-diana">0</div><div class="cl">dianas</div></div>
-      <div class="stat-chip clock"><div class="cv" id="st-clock">30</div><div class="cl">segundos</div></div>
+      <div class="stat-chip clock"><div class="cv" id="st-clock">60</div><div class="cl">segundos</div></div>
     </div>
     <div class="target-wrap">
       <div class="target-label">número meta</div>
@@ -418,7 +425,7 @@ const $ = id => document.getElementById(id);
    NÚCLEO DEL JUEGO (cifras)
    ===================================================================== */
 const LARGES = [25, 50, 75, 100];
-const ROUND_SECONDS = 30;   // ajustable; punto de partida acordado
+const ROUND_SECONDS = 60;   // ajustable
 
 function genRound() {
   const nLarge = Math.floor(Math.random() * 5);            // 0..4 grandes
@@ -834,6 +841,10 @@ window.addEventListener('load', () => {
   const kick = () => { ensureAudio(); startMusicMenu(); if (menuEl && !menuEl.paused) ['pointerdown', 'touchstart', 'click'].forEach(e => document.removeEventListener(e, kick)); };
   ['pointerdown', 'touchstart', 'click'].forEach(e => document.addEventListener(e, kick));
 });
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
 </script>
 </body>
 </html>
