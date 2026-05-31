@@ -165,6 +165,8 @@ body.light .room-code { box-shadow: inset 0 0 22px rgba(0,0,0,.05); }
 .ops { display: flex; gap: .5rem; justify-content: center; }
 .op { width: 54px; height: 50px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 1.5rem; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: center; transition: all .15s; }
 .op.sel { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.op-clear { color: var(--muted); font-size: 1.15rem; font-weight: 700; letter-spacing: .05em; }
+.op-clear:active { background: var(--panel); transform: scale(.94); }
 .build { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px; font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; font-weight: 700; }
 .build .slot { min-width: 48px; padding: .2rem .5rem; border-bottom: 1px solid var(--line); color: var(--muted); }
 .build .slot.filled { color: var(--text); border-color: var(--accent); }
@@ -380,6 +382,7 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
       <button class="op" data-op="−">−</button>
       <button class="op" data-op="×">×</button>
       <button class="op" data-op="÷">÷</button>
+      <button class="op op-clear" id="op-clear" title="borrar línea">C</button>
     </div>
     <div class="build" id="build">
       <span class="slot" id="slot-a">·</span><span class="slot" id="slot-op">·</span><span class="slot" id="slot-b">·</span>
@@ -642,6 +645,13 @@ function onTile(id) {
   renderTiles(); renderBuild();
 }
 function onOp(op) { if (!roundActive || mySubmitted) return; ensureAudio(); sfx('select'); sel.op = (sel.op === op) ? null : op; renderBuild(); }
+function clearBuild() {
+  if (!roundActive || mySubmitted) return;
+  if (sel.a == null && sel.op == null && sel.b == null) return;
+  ensureAudio(); sfx('select');
+  sel = { a: null, op: null, b: null };
+  renderTiles(); renderBuild();
+}
 function commit() {
   if (!roundActive || mySubmitted) return;
   const a = tiles.find(t => t.id === sel.a), b = tiles.find(t => t.id === sel.b);
@@ -1063,7 +1073,7 @@ $('lobby-rounds').addEventListener('click', e => {
 $('btn-start-game').addEventListener('click', () => { ensureAudio(); warmVoice(); hostStartGame(); });
 $('btn-lobby-leave').addEventListener('click', leaveRoom);
 
-$('ops').addEventListener('click', e => { const o = e.target.closest('.op'); if (o) onOp(o.dataset.op); });
+$('ops').addEventListener('click', e => { const o = e.target.closest('.op'); if (!o) return; if (o.id === 'op-clear') { clearBuild(); return; } onOp(o.dataset.op); });
 $('btn-eq').addEventListener('click', commit);
 $('btn-reset').addEventListener('click', resetRound);
 $('btn-stand').addEventListener('click', stand);
