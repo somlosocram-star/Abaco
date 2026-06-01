@@ -67,10 +67,9 @@ body.in-game #theme-toggle:active, body.in-game #sound-toggle:active, body.in-ga
 #app-splash { position: fixed; inset: 0; z-index: 1000; background: var(--bg); display: flex; align-items: center; justify-content: center; transition: opacity .6s ease; }
 html.pre-light #app-splash { background: #f3f2ee; }
 #app-splash.hiding { opacity: 0; pointer-events: none; }
-.splash-seal { width: 150px; height: 150px; border-radius: 50%; border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; position: relative; box-shadow: inset 0 0 40px rgba(255,255,255,.08), 0 0 80px rgba(255,255,255,.06); animation: sealMint 1.1s cubic-bezier(.2,.9,.3,1) both; overflow: hidden; }
-body.light .splash-seal { box-shadow: inset 0 0 40px rgba(0,0,0,.06), 0 0 80px rgba(0,0,0,.05); }
-.splash-seal::after { content: ''; position: absolute; border-radius: 50%; border: 1px dotted var(--muted); inset: -14px; animation: ringSpin 9s linear infinite; opacity: .6; }
-.splash-seal svg { width: 82px; height: 82px; color: var(--accent); animation: glyphDrop .7s cubic-bezier(.3,1.4,.5,1) both; animation-delay: .45s; }
+.splash-seal { width: 150px; height: 150px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; animation: sealMint 1.1s cubic-bezier(.2,.9,.3,1) both; overflow: hidden; }
+.splash-seal img { width: 100%; height: 100%; object-fit: contain; display: block; animation: glyphDrop .7s cubic-bezier(.3,1.4,.5,1) both; animation-delay: .3s; }
+body.light .splash-seal { box-shadow: none; }
 @keyframes sealMint { 0%{opacity:0; transform: scale(.3) rotateY(180deg);} 60%{opacity:1; transform: scale(1.08);} 100%{opacity:1; transform: scale(1);} }
 @keyframes glyphDrop { 0%{opacity:0; transform: translateY(-34px) scale(1.4);} 70%{opacity:1; transform: translateY(3px) scale(.96);} 100%{opacity:1; transform: translateY(0) scale(1);} }
 @keyframes ringSpin { to { transform: rotate(360deg); } }
@@ -78,11 +77,10 @@ body.light .splash-seal { box-shadow: inset 0 0 40px rgba(0,0,0,.06), 0 0 80px r
 .screen { display: none; position: fixed; inset: 0; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; z-index: 5; overflow-y: auto; }
 .screen.visible { display: flex; animation: screenIn .45s cubic-bezier(.2,.8,.3,1) both; }
 @keyframes screenIn { 0%{opacity:0; transform: translateY(12px);} 100%{opacity:1; transform: translateY(0);} }
-.seal { width: 64px; height: 64px; border-radius: 50%; border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 1.4rem; position: relative; box-shadow: inset 0 0 20px rgba(255,255,255,.06); flex-shrink: 0; }
-body.light .seal { box-shadow: inset 0 0 20px rgba(0,0,0,.05); }
-.seal::after { content: ''; position: absolute; border-radius: 50%; border: 1px dotted var(--muted); inset: -8px; opacity: .45; }
-.seal svg { width: 38px; height: 38px; color: var(--accent); }
-.seal.pulsing::after { animation: ringSpin 4s linear infinite; opacity: .7; }
+.seal { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.4rem; position: relative; flex-shrink: 0; overflow: hidden; }
+.seal img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.seal.pulsing { animation: sealBreathe 3.4s ease-in-out infinite; }
+@keyframes sealBreathe { 0%,100%{ transform: scale(1); } 50%{ transform: scale(1.04); } }
 .title { font-size: clamp(2.4rem, 9vw, 4.2rem); font-weight: 500; font-style: italic; line-height: .92; letter-spacing: -.01em; margin-bottom: .2rem; }
 .title span { display: block; font-style: normal; font-weight: 700; letter-spacing: -.02em; }
 .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: .62rem; letter-spacing: .5em; color: var(--muted); margin: 1.1rem 0 2rem; text-transform: uppercase; display: flex; align-items: center; gap: .8rem; }
@@ -278,11 +276,11 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
   <button class="btn-secondary btn tut-close" id="tut-close">cerrar</button>
 </div>
 
-<div id="app-splash"><div class="splash-seal"><svg viewBox="0 0 64 64"><use href="#ico-abaco"/></svg></div></div>
+<div id="app-splash"><div class="splash-seal"><img src="abaco-seal.png" alt=""></div></div>
 
 <!-- HOME -->
 <div id="screen-home" class="screen visible">
-  <div class="seal"><svg><use href="#ico-abaco"/></svg></div>
+  <div class="seal"><img src="abaco-seal.png" alt=""></div>
   <div class="title"><em>El</em><span>Ábaco</span></div>
   <div class="subtitle">cifras</div>
   <div class="btn-row">
@@ -293,7 +291,7 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
 
 <!-- SETUP solo -->
 <div id="screen-setup" class="screen">
-  <div class="seal"><svg><use href="#ico-abaco"/></svg></div>
+  <div class="seal"><img src="abaco-seal.png" alt=""></div>
   <div class="subtitle">práctica</div>
   <div class="section-label">rondas</div>
   <div class="cards" id="round-cards">
@@ -307,7 +305,7 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
 
 <!-- ONLINE menú -->
 <div id="screen-online" class="screen">
-  <div class="seal"><svg><use href="#ico-abaco"/></svg></div>
+  <div class="seal"><img src="abaco-seal.png" alt=""></div>
   <div class="subtitle">jugar online</div>
   <div class="online-intro">Hasta 8 jugadores en la misma sala. Uno crea la sala y comparte el código; los demás se unen.</div>
   <div class="btn-row">
@@ -319,7 +317,7 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
 
 <!-- ONLINE crear -->
 <div id="screen-create" class="screen">
-  <div class="seal"><svg><use href="#ico-abaco"/></svg></div>
+  <div class="seal"><img src="abaco-seal.png" alt=""></div>
   <div class="subtitle">crear sala</div>
   <div class="section-label">tu nombre</div>
   <input id="create-name" class="name-input" type="text" maxlength="12" autocomplete="off" placeholder="nombre">
@@ -329,7 +327,7 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
 
 <!-- ONLINE unirse -->
 <div id="screen-join" class="screen">
-  <div class="seal"><svg><use href="#ico-abaco"/></svg></div>
+  <div class="seal"><img src="abaco-seal.png" alt=""></div>
   <div class="subtitle">unirse a sala</div>
   <div class="section-label">código de la sala</div>
   <input id="join-code" class="code-input" type="text" inputmode="latin" maxlength="4" autocomplete="off" placeholder="ABCD">
@@ -342,7 +340,7 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
 
 <!-- LOBBY -->
 <div id="screen-lobby" class="screen">
-  <div class="seal pulsing"><svg><use href="#ico-abaco"/></svg></div>
+  <div class="seal pulsing"><img src="abaco-seal.png" alt=""></div>
   <div class="room-code-label">código de la sala</div>
   <div class="room-code mono" id="lobby-code">····</div>
   <div class="section-label">jugadores</div>

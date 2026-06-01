@@ -1,5 +1,5 @@
 /* Service worker de El Ábaco — HTML siempre fresco, assets en caché */
-const CACHE = 'abaco-v4';
+const CACHE = 'abaco-v5';
 
 const SHELL = [
   './',
@@ -8,7 +8,8 @@ const SHELL = [
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png',
-  './favicon-32.png'
+  './favicon-32.png',
+  './abaco-seal.png'
 ];
 
 self.addEventListener('install', e => {
