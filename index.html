@@ -30,11 +30,13 @@
   --bg: #0b0b0c; --panel: #141416; --panel-2: #1b1b1f; --line: #2c2c30;
   --text: #f4f4f2; --muted: #76767c; --accent: #f4f4f2; --amber: #d4a017;
   --grain-opacity: 0.45; --vignette: rgba(0,0,0,0.5); --on-accent: #0b0b0c; --bad: #e06363;
+  --cube-top:#34343a; --cube-bot:#191a1e; --cube-edge:#070708; --cube-text:#f2efe8; --hole:#0e0e10; --hole-line:#33323a;
 }
 body.light, html.pre-light body {
   --bg: #f3f2ee; --panel: #e7e6df; --panel-2: #eeede7; --line: #d2d0c6;
   --text: #17171a; --muted: #8c8b81; --accent: #17171a; --amber: #b8860b;
   --grain-opacity: 0.16; --vignette: rgba(60,58,50,0.10); --on-accent: #f3f2ee;
+  --cube-top:#ffffff; --cube-bot:#dad7cd; --cube-edge:#b3afa3; --cube-text:#1b1a17; --hole:#e2dfd6; --hole-line:#c4c0b4;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; overflow: hidden; }
@@ -152,27 +154,35 @@ body.light .room-code { box-shadow: inset 0 0 22px rgba(0,0,0,.05); }
 .target-wrap { margin: .7rem auto .25rem; }
 .target-label { font-family: 'IBM Plex Mono', monospace; font-size: .55rem; letter-spacing: .4em; color: var(--muted); text-transform: uppercase; }
 .target-num { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: clamp(2.4rem, 12vw, 3.6rem); line-height: 1; letter-spacing: .04em; }
-.board-wrap { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: .2rem .8rem; min-height: 0; gap: .55rem; position: relative; }
-.tiles { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; max-width: 440px; }
-.tile { min-width: 60px; height: 58px; padding: 0 .6rem; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1.35rem; color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; outline: none; transition: transform .12s, border-color .15s, background .15s, opacity .2s; position: relative; }
-.tile.gen { border-style: dashed; border-color: var(--accent); }
-.tile.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; transform: translateY(-3px); }
-.tile.used { opacity: .28; pointer-events: none; text-decoration: line-through; }
-.tile.appear { animation: tilePop .3s cubic-bezier(.3,1.4,.5,1) both; }
-@keyframes tilePop { 0%{opacity:0; transform: scale(.3);} 70%{transform: scale(1.12);} 100%{opacity:1; transform: scale(1);} }
-.ops { display: flex; gap: .5rem; justify-content: center; }
-.op { width: 54px; height: 50px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 1.5rem; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-.op.sel { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
-.op-clear { color: var(--muted); font-size: 1.15rem; font-weight: 700; letter-spacing: .05em; }
-.op-clear:active { background: var(--panel); transform: scale(.94); }
-.build { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px; font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; font-weight: 700; }
-.build .slot { min-width: 48px; padding: .2rem .5rem; border-bottom: 1px solid var(--line); color: var(--muted); }
-.build .slot.filled { color: var(--text); border-color: var(--accent); }
-.build .eq { color: var(--muted); }
-.build .res { color: var(--accent); min-width: 48px; }
-.build .res.bad { color: var(--bad); font-size: .9rem; }
-.btn-eq { width: 50px; height: 46px; border-radius: 9px; border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: center; transition: all .15s; margin-left: .3rem; }
-.btn-eq:disabled { opacity: .25; cursor: default; background: transparent; color: var(--accent); }
+.board-wrap { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: .2rem .8rem; min-height: 0; gap: .8rem; position: relative; }
+.tiles { display: flex; flex-direction: column; gap: .6rem; align-items: center; }
+.cube-row { display: flex; gap: .6rem; justify-content: center; }
+.cube, .slot { width: 64px; height: 64px; border-radius: 13px; position: relative; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1.4rem; user-select: none; -webkit-user-select: none; touch-action: none; }
+.cube { background: linear-gradient(158deg, var(--cube-top), var(--cube-bot)); color: var(--cube-text);
+  box-shadow: inset 0 2px 1px rgba(255,255,255,.14), inset 0 -4px 6px rgba(0,0,0,.3), 0 5px 0 var(--cube-edge), 0 8px 11px rgba(0,0,0,.4);
+  cursor: grab; transition: transform .12s cubic-bezier(.2,.8,.3,1), box-shadow .12s; animation: settle .26s cubic-bezier(.25,1.4,.5,1) both; }
+.cube.op { font-size: 1.55rem; }
+.cube.res { box-shadow: inset 0 2px 1px rgba(255,255,255,.14), inset 0 -4px 6px rgba(0,0,0,.3), 0 5px 0 var(--cube-edge), 0 8px 11px rgba(0,0,0,.4), 0 0 0 1.5px var(--amber) inset; }
+.cube.diana { color: var(--amber); box-shadow: inset 0 2px 1px rgba(255,255,255,.14), inset 0 -4px 6px rgba(0,0,0,.3), 0 5px 0 var(--cube-edge), 0 8px 11px rgba(0,0,0,.4), 0 0 24px rgba(212,160,23,.55); }
+.slot { background: var(--hole); box-shadow: inset 0 5px 9px rgba(0,0,0,.5), inset 0 -1px 0 rgba(255,255,255,.04); border: 1.5px dashed var(--hole-line); color: var(--muted); font-size: 1.1rem; transition: box-shadow .15s, border-color .15s; }
+.slot.dropok { border-color: var(--amber); border-style: solid; box-shadow: inset 0 0 0 2px rgba(212,160,23,.5), inset 0 5px 9px rgba(0,0,0,.4); }
+.slot.filled { border: none; background: transparent; box-shadow: none; }
+
+.ops { display: flex; gap: .5rem; justify-content: center; align-items: center; }
+.op-clear { width: 54px; height: 50px; border-radius: 11px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 1.15rem; font-weight: 700; letter-spacing: .05em; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: center; }
+.op-clear:active { transform: scale(.94); }
+
+.build { display: flex; align-items: center; justify-content: center; gap: .45rem; min-height: 64px; }
+.build .bslot { width: 54px; height: 54px; font-size: 1.2rem; }
+.build .bslot.op { width: 48px; height: 48px; }
+.build .bslot.filled .cube { width: 54px; height: 54px; animation: none; }
+.build .bslot.op.filled .cube { width: 48px; height: 48px; }
+.build .eq { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; color: var(--muted); margin: 0 .05rem; }
+.build .bslot.bad { color: var(--bad); border-color: var(--bad); border-style: solid; font-size: 1.3rem; }
+
+#ghost { position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none; display: none; margin: 0 !important; will-change: transform; transition: none !important; animation: none !important;
+  box-shadow: inset 0 2px 1px rgba(255,255,255,.16), inset 0 -4px 6px rgba(0,0,0,.32), 0 11px 0 var(--cube-edge), 0 20px 28px rgba(0,0,0,.55) !important; }
+@keyframes settle { 0%{transform:scale(.7);opacity:0;} 60%{transform:scale(1.07);} 100%{transform:scale(1);opacity:1;} }
 .best-line { font-family: 'IBM Plex Mono', monospace; font-size: .7rem; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; min-height: 1.1em; }
 .best-line b { color: var(--text); font-weight: 700; font-size: .95rem; }
 .best-line .diana { color: var(--amber); }
@@ -376,16 +386,18 @@ body.light #final { background: radial-gradient(ellipse at center, rgba(220,190,
   <div class="board-wrap">
     <div class="tiles" id="tiles"></div>
     <div class="ops" id="ops">
-      <button class="op" data-op="+">+</button>
-      <button class="op" data-op="−">−</button>
-      <button class="op" data-op="×">×</button>
-      <button class="op" data-op="÷">÷</button>
-      <button class="op op-clear" id="op-clear" title="borrar línea">C</button>
+      <div class="cube op" data-kind="op" data-op="+">+</div>
+      <div class="cube op" data-kind="op" data-op="−">−</div>
+      <div class="cube op" data-kind="op" data-op="×">×</div>
+      <div class="cube op" data-kind="op" data-op="÷">÷</div>
+      <button class="op-clear" id="op-clear" title="borrar línea">C</button>
     </div>
     <div class="build" id="build">
-      <span class="slot" id="slot-a">·</span><span class="slot" id="slot-op">·</span><span class="slot" id="slot-b">·</span>
-      <span class="eq">=</span><span class="res" id="slot-res">·</span>
-      <button class="btn-eq" id="btn-eq" disabled>=</button>
+      <div class="slot bslot" data-slot="a">·</div>
+      <div class="slot bslot op" data-slot="op">·</div>
+      <div class="slot bslot" data-slot="b">·</div>
+      <span class="eq">=</span>
+      <div class="slot bslot" data-slot="res">·</div>
     </div>
     <div class="best-line" id="best-line">tu cifra: —</div>
     <div class="wait-veil" id="wait-veil">
@@ -495,8 +507,8 @@ function rankPoints(subs, target) {
 let online = false;
 let totalRounds = 10;
 let round = 0, target = 0;
-let tiles = [], nextId = 0, best = null;
-let sel = { a: null, op: null, b: null };
+let cells = [], roundNums = [], best = null;
+let line = { a: null, op: null, b: null, res: null };
 let roundActive = false;
 let timeLeft = ROUND_SECONDS, timerIv = null, roundLocalStart = 0;
 let history = [];
@@ -514,12 +526,13 @@ function toast(msg) {
 /* ===================== RONDA (común) ===================== */
 function setupRoundBoard(nums, tg) {
   target = tg;
-  tiles = nums.map(v => ({ id: nextId++, value: v, used: false, gen: false }));
-  best = null; sel = { a: null, op: null, b: null };
+  roundNums = nums.slice();
+  cells = nums.map(v => ({ value: v, gen: false }));
+  best = null; line = { a: null, op: null, b: null, res: null };
   roundActive = true; mySubmitted = false;
   $('wait-veil').classList.remove('on');
   $('target-num').textContent = target;
-  renderTiles(); renderBuild(); renderBest();
+  renderBoard(); renderBuild(); renderBest();
 }
 function renderClock() {
   const el = $('st-clock');
@@ -561,7 +574,7 @@ function finishSoloRound() {
   const figure = best ? best.value : 0;
   const dist = best ? best.dist : Infinity;
   const diana = best ? best.dist === 0 : false;
-  const sol = solveBest(tiles.filter(t => !t.gen).map(t => t.value), target);
+  const sol = solveBest(roundNums, target);
   history.push({ round, figure, dist, diana, bestV: sol.v });
   revealSolo(figure, dist, diana, sol);
 }
@@ -601,29 +614,48 @@ function endGameSolo() {
   setTimeout(() => speak(dianas + ' dianas de ' + totalRounds + '.'), 1300);
 }
 
-/* ===================== RENDER calculadora ===================== */
-function renderTiles() {
+/* ===================== RENDER calculadora (cubos) ===================== */
+function renderBoard() {
   const cont = $('tiles'); cont.innerHTML = '';
-  tiles.forEach(t => {
-    const b = document.createElement('button');
-    b.className = 'tile' + (t.gen ? ' gen' : '') + (t.used ? ' used' : '') + (sel.a === t.id || sel.b === t.id ? ' sel' : '');
-    b.textContent = t.value;
-    b.addEventListener('click', () => onTile(t.id));
-    cont.appendChild(b);
-  });
+  const N = cells.length, top = Math.ceil(N / 2);
+  for (let r = 0; r < 2; r++) {
+    const row = document.createElement('div'); row.className = 'cube-row';
+    const start = r === 0 ? 0 : top, end = r === 0 ? top : N;
+    for (let i = start; i < end; i++) row.appendChild(cellEl(i));
+    if (end > start) cont.appendChild(row);
+  }
+}
+function cellEl(i) {
+  const cell = cells[i];
+  if (!cell) { const s = document.createElement('div'); s.className = 'slot'; s.dataset.hole = i; return s; }
+  const c = document.createElement('div');
+  c.className = 'cube' + (cell.gen ? ' res' : '');
+  c.textContent = cell.value;
+  c.dataset.kind = 'num'; c.dataset.cell = i;
+  bindCube(c); return c;
+}
+function fillSlot(name, value) {
+  const slot = document.querySelector('[data-slot="' + name + '"]');
+  slot.className = 'slot bslot' + (name === 'op' ? ' op' : '');
+  slot.innerHTML = '';
+  if (value == null) { slot.textContent = '·'; return; }
+  slot.classList.add('filled');
+  const c = document.createElement('div'); c.className = 'cube' + (name === 'op' ? ' op' : '');
+  c.textContent = value; slot.appendChild(c);
 }
 function renderBuild() {
-  const a = sel.a != null ? tiles.find(t => t.id === sel.a) : null;
-  const b = sel.b != null ? tiles.find(t => t.id === sel.b) : null;
-  $('slot-a').textContent = a ? a.value : '·'; $('slot-a').classList.toggle('filled', !!a);
-  $('slot-op').textContent = sel.op || '·'; $('slot-op').classList.toggle('filled', !!sel.op);
-  $('slot-b').textContent = b ? b.value : '·'; $('slot-b').classList.toggle('filled', !!b);
-  document.querySelectorAll('.op').forEach(o => o.classList.toggle('sel', o.dataset.op === sel.op));
-  const res = (a && b && sel.op) ? combine(a.value, b.value, sel.op) : null;
-  const resEl = $('slot-res');
-  if (a && b && sel.op) { if (res == null) { resEl.textContent = '✕'; resEl.classList.add('bad'); } else { resEl.textContent = res; resEl.classList.remove('bad'); } }
-  else { resEl.textContent = '·'; resEl.classList.remove('bad'); }
-  $('btn-eq').disabled = res == null;
+  fillSlot('a', line.a ? line.a.value : null);
+  fillSlot('op', line.op);
+  fillSlot('b', line.b ? line.b.value : null);
+  const slot = document.querySelector('[data-slot="res"]');
+  slot.className = 'slot bslot'; slot.innerHTML = '';
+  if (line.res === 'bad') { slot.classList.add('bad'); slot.textContent = '✕'; }
+  else if (line.res) {
+    slot.classList.add('filled');
+    const diana = line.res.value === target;
+    const c = document.createElement('div'); c.className = 'cube res' + (diana ? ' diana' : '');
+    c.textContent = line.res.value; c.dataset.kind = 'res'; bindCube(c); slot.appendChild(c);
+  } else slot.textContent = '·';
 }
 function renderBest() {
   const el = $('best-line');
@@ -631,46 +663,139 @@ function renderBest() {
   if (best.dist === 0) { el.innerHTML = 'tu cifra: <b class="diana">' + best.value + '</b> · ¡diana!'; return; }
   el.innerHTML = 'tu cifra: <b>' + best.value + '</b> · a ' + best.dist + ' del meta';
 }
-function onTile(id) {
-  if (!roundActive || mySubmitted) return;
-  const t = tiles.find(x => x.id === id); if (!t || t.used) return;
-  ensureAudio(); sfx('select');
-  if (sel.a === id) { sel.a = sel.b; sel.b = null; }
-  else if (sel.b === id) { sel.b = null; }
-  else if (sel.a == null) sel.a = id;
-  else if (sel.b == null) sel.b = id;
-  else { sel.a = id; sel.b = null; }
-  renderTiles(); renderBuild();
+
+/* ---------- colocación ---------- */
+function placeNum(cellIdx, where) {
+  if (!roundActive || mySubmitted || line.res) return false;
+  if (line[where]) return false;
+  const cell = cells[cellIdx]; if (!cell) return false;
+  line[where] = { value: cell.value, cell: cellIdx, gen: cell.gen };
+  cells[cellIdx] = null; ensureAudio(); sfx('select');
+  tryCombine(); renderBoard(); renderBuild(); return true;
 }
-function onOp(op) { if (!roundActive || mySubmitted) return; ensureAudio(); sfx('select'); sel.op = (sel.op === op) ? null : op; renderBuild(); }
+function placeOp(op) {
+  if (!roundActive || mySubmitted || line.res) return false;
+  if (line.op) return false;
+  line.op = op; ensureAudio(); sfx('select');
+  tryCombine(); renderBuild(); return true;
+}
+function tryCombine() {
+  if (line.a && line.op && line.b && line.res == null) {
+    const r = combine(line.a.value, line.b.value, line.op);
+    if (r == null) { line.res = 'bad'; sfx('bad'); return; }
+    line.res = { value: r };
+    const d = Math.abs(r - target);
+    if (best == null || d < best.dist) best = { value: r, dist: d };
+    sfx(d === 0 ? 'diana' : 'commit'); renderBest();
+  }
+}
+function placeRes(holeIdx) {
+  if (!line.res || line.res === 'bad') return false;
+  if (cells[holeIdx]) return false;
+  cells[holeIdx] = { value: line.res.value, gen: true };
+  line = { a: null, op: null, b: null, res: null };
+  ensureAudio(); sfx('select');
+  renderBoard(); renderBuild(); return true;
+}
+function firstHole() { for (let i = 0; i < cells.length; i++) if (!cells[i]) return i; return -1; }
 function clearBuild() {
   if (!roundActive || mySubmitted) return;
-  if (sel.a == null && sel.op == null && sel.b == null) return;
+  if (!line.a && !line.op && !line.b && line.res == null) return;
   ensureAudio(); sfx('select');
-  sel = { a: null, op: null, b: null };
-  renderTiles(); renderBuild();
-}
-function commit() {
-  if (!roundActive || mySubmitted) return;
-  const a = tiles.find(t => t.id === sel.a), b = tiles.find(t => t.id === sel.b);
-  if (!a || !b || !sel.op) return;
-  const r = combine(a.value, b.value, sel.op);
-  if (r == null) { sfx('bad'); return; }
-  a.used = true; b.used = true;
-  tiles.push({ id: nextId++, value: r, used: false, gen: true });
-  const d = Math.abs(r - target);
-  if (best == null || d < best.dist) best = { value: r, dist: d };
-  sel = { a: null, op: null, b: null };
-  sfx(d === 0 ? 'diana' : 'commit');
-  renderTiles(); renderBuild(); renderBest();
-  const last = $('tiles').lastChild; if (last) last.classList.add('appear');
+  ['a', 'b'].forEach(k => { const v = line[k]; if (v && v.cell != null && !cells[v.cell]) cells[v.cell] = { value: v.value, gen: v.gen }; });
+  line = { a: null, op: null, b: null, res: null };
+  renderBoard(); renderBuild();
 }
 function resetRound() {
   if (!roundActive || mySubmitted) return;
   ensureAudio(); sfx('select');
-  tiles = tiles.filter(t => !t.gen); tiles.forEach(t => t.used = false);
-  sel = { a: null, op: null, b: null };
-  renderTiles(); renderBuild();
+  cells = roundNums.map(v => ({ value: v, gen: false }));
+  line = { a: null, op: null, b: null, res: null };
+  renderBoard(); renderBuild();
+}
+function autoPlace(el) {
+  const kind = el.dataset.kind;
+  if (kind === 'num') { const w = !line.a ? 'a' : (!line.b ? 'b' : null); if (w) placeNum(+el.dataset.cell, w); }
+  else if (kind === 'op') placeOp(el.dataset.op);
+  else if (kind === 'res') { const h = firstHole(); if (h >= 0) placeRes(h); }
+}
+
+/* ---------- DRAG (pointer events) ---------- */
+let drag = null, lastTap = { el: null, t: 0 }, rafId = null, pendX = 0, pendY = 0, lastHi = 0;
+function bindCube(el) { el.addEventListener('pointerdown', onDown); }
+function onDown(e) {
+  if (!roundActive || mySubmitted) return;
+  const el = e.currentTarget, r = el.getBoundingClientRect();
+  drag = { el, kind: el.dataset.kind, startX: e.clientX, startY: e.clientY, moved: false,
+    ox: e.clientX - r.left, oy: e.clientY - r.top, w: r.width, h: r.height, cx: e.clientX, cy: e.clientY };
+  el.setPointerCapture(e.pointerId);
+  el.addEventListener('pointermove', onMove);
+  el.addEventListener('pointerup', onUp);
+  el.addEventListener('pointercancel', onUp);
+}
+function onMove(e) {
+  if (!drag) return;
+  if (!drag.moved) {
+    if (Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY) < 8) return;
+    startGhost(); drag.moved = true;
+  }
+  drag.cx = e.clientX; drag.cy = e.clientY;
+  pendX = e.clientX - drag.ox; pendY = e.clientY - drag.oy;
+  if (rafId == null) rafId = requestAnimationFrame(frame);
+  const now = performance.now();
+  if (now - lastHi > 70) { lastHi = now; highlight(e.clientX, e.clientY); }
+}
+function frame() { rafId = null; $('ghost').style.transform = 'translate(' + pendX + 'px,' + pendY + 'px) scale(1.05)'; }
+function startGhost() {
+  const g = $('ghost');
+  g.className = 'cube' + (drag.kind === 'op' ? ' op' : '');
+  g.textContent = drag.el.textContent;
+  g.style.width = drag.w + 'px'; g.style.height = drag.h + 'px';
+  pendX = drag.cx - drag.ox; pendY = drag.cy - drag.oy;
+  g.style.transform = 'translate(' + pendX + 'px,' + pendY + 'px) scale(1.05)';
+  g.style.display = 'flex'; drag.el.style.visibility = 'hidden';
+}
+function targetUnder(x, y) {
+  const el = document.elementFromPoint(x, y); if (!el) return null;
+  return el.closest('[data-slot]') || el.closest('[data-hole]');
+}
+function highlight(x, y) {
+  const t = targetUnder(x, y);
+  document.querySelectorAll('.dropok').forEach(s => { if (s !== t) s.classList.remove('dropok'); });
+  if (t && validDrop(t)) t.classList.add('dropok');
+}
+function validDrop(t) {
+  const slot = t.dataset.slot, hole = t.dataset.hole;
+  if (drag.kind === 'num') return (slot === 'a' || slot === 'b') && !line.res;
+  if (drag.kind === 'op') return slot === 'op' && !line.res;
+  if (drag.kind === 'res') return hole != null;
+  return false;
+}
+function onUp(e) {
+  const el = drag && drag.el;
+  if (drag && drag.moved) {
+    const t = targetUnder(e.clientX, e.clientY); let ok = false;
+    if (t && validDrop(t)) {
+      if (drag.kind === 'num') ok = placeNum(+el.dataset.cell, t.dataset.slot);
+      else if (drag.kind === 'op') ok = placeOp(el.dataset.op);
+      else if (drag.kind === 'res') ok = placeRes(+t.dataset.hole);
+    }
+    endGhost(); if (!ok) { renderBoard(); renderBuild(); }
+  } else if (drag) {
+    const now = Date.now();
+    if (lastTap.el === el && now - lastTap.t < 320) { autoPlace(el); lastTap = { el: null, t: 0 }; }
+    else lastTap = { el, t: now };
+  }
+  cleanup();
+}
+function endGhost() { const g = $('ghost'); g.style.display = 'none'; g.className = '';
+  document.querySelectorAll('.dropok').forEach(s => s.classList.remove('dropok')); }
+function cleanup() {
+  if (!drag) return; const el = drag.el; el.style.visibility = '';
+  el.removeEventListener('pointermove', onMove);
+  el.removeEventListener('pointerup', onUp);
+  el.removeEventListener('pointercancel', onUp);
+  drag = null;
 }
 
 /* =====================================================================
@@ -1071,8 +1196,8 @@ $('lobby-rounds').addEventListener('click', e => {
 $('btn-start-game').addEventListener('click', () => { ensureAudio(); warmVoice(); hostStartGame(); });
 $('btn-lobby-leave').addEventListener('click', leaveRoom);
 
-$('ops').addEventListener('click', e => { const o = e.target.closest('.op'); if (!o) return; if (o.id === 'op-clear') { clearBuild(); return; } onOp(o.dataset.op); });
-$('btn-eq').addEventListener('click', commit);
+$('op-clear').addEventListener('click', clearBuild);
+document.querySelectorAll('#ops .cube').forEach(bindCube);
 $('btn-reset').addEventListener('click', resetRound);
 $('btn-stand').addEventListener('click', stand);
 
@@ -1092,5 +1217,6 @@ window.addEventListener('load', () => {
 });
 if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {})); }
 </script>
+<div id="ghost"></div>
 </body>
 </html>

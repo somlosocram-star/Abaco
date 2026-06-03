@@ -1,5 +1,5 @@
 /* Service worker de El Ábaco — HTML siempre fresco, assets en caché */
-const CACHE = 'abaco-v5';
+const CACHE = 'abaco-v6';
 
 const SHELL = [
   './',
