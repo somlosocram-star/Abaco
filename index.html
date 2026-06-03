@@ -938,7 +938,10 @@ function handleRoom() {
     renderLiveScores();
     if (amHost) hostTick();
   }
-  if (roomData.state === 'ended') { if (!$('final').classList.contains('visible')) endGameOnline(); }
+  if (roomData.state === 'ended') {
+    if (!$('final').classList.contains('visible')) endGameOnline();
+    if (amHost && roomData.rematchReq) rematchOnline();
+  }
 }
 function syncRoundCardSelection() {
   const r = (roomData.mode && roomData.mode.rounds) || 10;
@@ -1095,17 +1098,24 @@ function endGameOnline() {
       '<span class="rk-nm">' + escapeHtml(p.name) + '</span><span class="rk-pts mono">' + p.score + '</span>';
     st.appendChild(row);
   });
-  $('btn-again').style.display = amHost ? '' : 'none';
+  $('btn-again').style.display = '';
+  $('btn-again').disabled = false;
   $('btn-again').textContent = 'Revancha';
   $('btn-home').textContent = 'salir';
   $('final').classList.add('visible');
   setTimeout(() => sfx('win'), 400);
   setTimeout(() => speak(winner ? winner.name + ' gana la partida con ' + winner.score + ' puntos.' : ''), 1300);
 }
+function requestRematch() {
+  if (amHost) { rematchOnline(); return; }
+  $('btn-again').disabled = true;
+  $('btn-again').textContent = 'pidiendo…';
+  fbSet(BASE + '/' + roomCode + '/rematchReq', myId);
+}
 function rematchOnline() {
   if (!amHost) return;
   const pl = roomData.players || {};
-  const upd = { state: 'lobby', currentRound: 0, result: null, round: null, subs: null };
+  const upd = { state: 'lobby', currentRound: 0, result: null, round: null, subs: null, rematchReq: null };
   Object.keys(pl).forEach(id => upd['players/' + id + '/score'] = 0);
   $('final').classList.remove('visible');
   fbUpd(BASE + '/' + roomCode, upd);
@@ -1239,7 +1249,7 @@ applyMode();
 $('btn-reset').addEventListener('click', resetRound);
 $('btn-stand').addEventListener('click', stand);
 
-$('btn-again').addEventListener('click', () => { if (online) rematchOnline(); else { $('final').classList.remove('visible'); startSolo(); } });
+$('btn-again').addEventListener('click', () => { if (online) requestRematch(); else { $('final').classList.remove('visible'); startSolo(); } });
 $('btn-home').addEventListener('click', () => { if (online) leaveRoom(); else { $('final').classList.remove('visible'); show('screen-home'); startMusicMenu(); } });
 
 $('theme-toggle').addEventListener('click', () => applyTheme(!document.body.classList.contains('light')));
