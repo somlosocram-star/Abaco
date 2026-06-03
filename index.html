@@ -641,7 +641,8 @@ function fillSlot(name, value) {
   if (value == null) { slot.textContent = '·'; return; }
   slot.classList.add('filled');
   const c = document.createElement('div'); c.className = 'cube' + (name === 'op' ? ' op' : '');
-  c.textContent = value; slot.appendChild(c);
+  c.textContent = value; c.dataset.kind = 'line'; c.dataset.lslot = name;
+  bindCube(c); slot.appendChild(c);
 }
 function renderBuild() {
   fillSlot('a', line.a ? line.a.value : null);
@@ -698,6 +699,26 @@ function placeRes(holeIdx) {
   renderBoard(); renderBuild(); return true;
 }
 function firstHole() { for (let i = 0; i < cells.length; i++) if (!cells[i]) return i; return -1; }
+function pullFromLine(slot) {
+  if (!roundActive || mySubmitted) return;
+  if (line.res != null) line.res = null;            // un cambio invalida el resultado pendiente
+  if (slot === 'op') { if (line.op == null) return; line.op = null; }
+  else {
+    const v = line[slot]; if (!v) return;
+    const dest = (v.cell != null && !cells[v.cell]) ? v.cell : firstHole();
+    if (dest >= 0) cells[dest] = { value: v.value, gen: v.gen };
+    line[slot] = null;
+  }
+  ensureAudio(); sfx('select'); renderBoard(); renderBuild();
+}
+function returnOperandToCell(slot, holeIdx) {
+  if (slot === 'op' || !line[slot] || cells[holeIdx]) return false;
+  if (line.res != null) line.res = null;
+  const v = line[slot];
+  cells[holeIdx] = { value: v.value, gen: v.gen };
+  line[slot] = null;
+  ensureAudio(); sfx('select'); renderBoard(); renderBuild(); return true;
+}
 function clearBuild() {
   if (!roundActive || mySubmitted) return;
   if (!line.a && !line.op && !line.b && line.res == null) return;
@@ -726,7 +747,7 @@ function bindCube(el) { el.addEventListener('pointerdown', onDown); }
 function onDown(e) {
   if (!roundActive || mySubmitted) return;
   const el = e.currentTarget, r = el.getBoundingClientRect();
-  drag = { el, kind: el.dataset.kind, startX: e.clientX, startY: e.clientY, moved: false,
+  drag = { el, kind: el.dataset.kind, lslot: el.dataset.lslot, startX: e.clientX, startY: e.clientY, moved: false,
     ox: e.clientX - r.left, oy: e.clientY - r.top, w: r.width, h: r.height, cx: e.clientX, cy: e.clientY };
   el.setPointerCapture(e.pointerId);
   el.addEventListener('pointermove', onMove);
@@ -766,9 +787,10 @@ function highlight(x, y) {
 }
 function validDrop(t) {
   const slot = t.dataset.slot, hole = t.dataset.hole;
-  if (drag.kind === 'num') return (slot === 'a' || slot === 'b') && !line.res;
-  if (drag.kind === 'op') return slot === 'op' && !line.res;
+  if (drag.kind === 'num') return (slot === 'a' || slot === 'b') && !line[slot] && !line.res;
+  if (drag.kind === 'op') return slot === 'op' && !line.op && !line.res;
   if (drag.kind === 'res') return hole != null;
+  if (drag.kind === 'line') return hole != null && drag.lslot !== 'op';
   return false;
 }
 function onUp(e) {
@@ -779,12 +801,16 @@ function onUp(e) {
       if (drag.kind === 'num') ok = placeNum(+el.dataset.cell, t.dataset.slot);
       else if (drag.kind === 'op') ok = placeOp(el.dataset.op);
       else if (drag.kind === 'res') ok = placeRes(+t.dataset.hole);
+      else if (drag.kind === 'line') ok = returnOperandToCell(drag.lslot, +t.dataset.hole);
     }
     endGhost(); if (!ok) { renderBoard(); renderBuild(); }
   } else if (drag) {
-    const now = Date.now();
-    if (lastTap.el === el && now - lastTap.t < 320) { autoPlace(el); lastTap = { el: null, t: 0 }; }
-    else lastTap = { el, t: now };
+    if (drag.kind === 'line') { pullFromLine(drag.lslot); lastTap = { el: null, t: 0 }; }
+    else {
+      const now = Date.now();
+      if (lastTap.el === el && now - lastTap.t < 320) { autoPlace(el); lastTap = { el: null, t: 0 }; }
+      else lastTap = { el, t: now };
+    }
   }
   cleanup();
 }
